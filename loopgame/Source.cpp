@@ -1,6 +1,7 @@
 #include <SFML/Graphics.hpp>
 
 std::vector<sf::Sprite> grass;
+std::vector<sf::Sprite> blockorange;
 
 void setHitbox(sf::FloatRect& hitbox, const sf::FloatRect& Sethitbox) {
 	hitbox = Sethitbox;
@@ -23,6 +24,12 @@ void marioCollisionFoot(sf::Sprite& mario, const sf::FloatRect& other) {
 			break;
 		}
 	}
+	for (const auto& i : blockorange) {
+		if (isCollide(other, mario, getGlobalHitbox(block, i))) {
+			flag = true;
+			break;
+		}
+	}
 	if (!flag) {
 		mario.move({ 0.0f, 10.0f });
 	}
@@ -36,7 +43,10 @@ int main()
 	sf::FloatRect mariofoot({ 1,28 }, { 22,3 });
 
 	window.setFramerateLimit(50);
-
+	for (int i = 0; i < 6; ++i) {
+		blockorange.push_back(sf::Sprite(tileset, sf::IntRect({ 0, 64 }, { 32, 32 })));
+		blockorange.back().setPosition(sf::Vector2f({ i * 32.0f,384.0f }));
+	}
 	grass.push_back(sf::Sprite(tileset, sf::IntRect({ 0, 0 }, { 32, 32 })));
 	grass.back().setPosition({ 0,416 });
 	grass.push_back(sf::Sprite(tileset, sf::IntRect({ 0, 32 }, { 32, 32 })));
@@ -77,6 +87,9 @@ int main()
 
 		window.clear();
 		for (const auto& i : grass) {
+			window.draw(i);
+		}
+		for (const auto& i : blockorange) {
 			window.draw(i);
 		}
 		window.draw(mario);
