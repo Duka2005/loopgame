@@ -30,12 +30,21 @@ void marioCollisionFoot(sf::Sprite& mario, const sf::FloatRect& other) {
 			break;
 		}
 	}
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Z))
+	{
+		flag = true;
+		mario.move({ 0.f, -5.0f });
+	}
+
 	if (!flag) {
 		mario.move({ 0.0f, 10.0f });
 	}
 }
 int main()
 {
+	float time = 0;
+
 	sf::RenderWindow window(sf::VideoMode({ 640, 480 }), "Mario Runner!");
 	sf::Texture tileset("Resources/tileset.png");
 	sf::Texture mariotexture("Resources/SmallMario.png");
@@ -67,6 +76,9 @@ int main()
 
 	while (window.isOpen()) {
 		while (const std::optional event = window.pollEvent()) {
+			if (event->is < sf::Event::KeyReleased>()) {
+				time = 0;
+			}
 			if (event->is<sf::Event::Closed>())
 				window.close();
 		}
@@ -74,13 +86,25 @@ int main()
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left))
 		{
 			// left key is pressed: move our character
-			mario.move({ -7.5f, 0.f });
+			time += 0.5;
+			if (time < 7.5) {
+				mario.move({ -time, 0.f });
+			}
+			else {
+				mario.move({ -7.5f, 0.f });
+			}
 		}
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right))
 		{
 			// right key is pressed: move our character
-			mario.move({ 7.5f, 0.f });
+			time += 0.5;
+			if (time < 7.5) {
+				mario.move({ time, 0.f });
+			}
+			else {
+				mario.move({ 7.5f, 0.f });
+			}
 		}
 
 		marioCollisionFoot(mario, mariofoot);
