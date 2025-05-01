@@ -1,19 +1,85 @@
 #include <SFML/Graphics.hpp>
 
+std::vector<sf::Sprite> grass;
+
+void setHitbox(sf::FloatRect& hitbox, const sf::FloatRect& Sethitbox) {
+	hitbox = Sethitbox;
+}
+sf::FloatRect getGlobalHitbox(const sf::FloatRect& hitbox, const sf::Vector2f& pos) {
+	return sf::FloatRect({ pos.x + hitbox.position.x, pos.y + hitbox.position.y }, { hitbox.size.x, hitbox.size.y });
+}
+sf::FloatRect getGlobalHitbox(const sf::FloatRect& hitbox, const sf::Sprite& sprite) {
+	return sprite.getTransform().transformRect(hitbox);
+}
+bool isCollide(const sf::FloatRect& hitbox, const sf::Sprite& sprite, const sf::FloatRect& other) {
+	return bool(getGlobalHitbox(hitbox, sprite).findIntersection(other));
+}
+void marioCollisionFoot(sf::Sprite& mario, const sf::FloatRect& other) {
+	sf::FloatRect block({ 0, 0 }, { 32, 32 });
+	bool flag = false;
+	for (const auto& i : grass) {
+		if (isCollide(other, mario, getGlobalHitbox(block, i))) {
+			flag = true;
+			break;
+		}
+	}
+	if (!flag) {
+		mario.move({ 0.0f, 10.0f });
+	}
+}
 int main()
 {
 	sf::RenderWindow window(sf::VideoMode({ 640, 480 }), "Mario Runner!");
-	sf::Texture grass1("Resources/1.png", false, sf::IntRect({ 0, 0 }, { 32, 32 }));
-	sf::Sprite grass(grass1);
+	sf::Texture tileset("Resources/tileset.png");
+	sf::Texture mariotexture("Resources/SmallMario.png");
+
+	sf::FloatRect mariofoot({ 1,28 }, { 22,3 });
+
+	window.setFramerateLimit(50);
+
+	grass.push_back(sf::Sprite(tileset, sf::IntRect({ 0, 0 }, { 32, 32 })));
+	grass.back().setPosition({ 0,416 });
+	grass.push_back(sf::Sprite(tileset, sf::IntRect({ 0, 32 }, { 32, 32 })));
+	grass.back().setPosition({ 0,448 });
+	for (int i = 0; i < 18; ++i) {
+		grass.push_back(sf::Sprite(tileset, sf::IntRect({ 32, 0 }, { 32, 32 })));
+		grass.back().setPosition(sf::Vector2f({ 32.0f + i * 32.0f,416.0f }));
+		grass.push_back(sf::Sprite(tileset, sf::IntRect({ 32, 32 }, { 32, 32 })));
+		grass.back().setPosition(sf::Vector2f({ 32.0f + i * 32.0f,448.0f }));
+	}
+	grass.push_back(sf::Sprite(tileset, sf::IntRect({ 64, 0 }, { 32, 32 })));
+	grass.back().setPosition(sf::Vector2f({ 32.0f + 18 * 32.0f,416.0f }));
+	grass.push_back(sf::Sprite(tileset, sf::IntRect({ 64, 32 }, { 32, 32 })));
+	grass.back().setPosition(sf::Vector2f({ 32.0f + 18 * 32.0f,448.0f }));
+
+	sf::Sprite mario(mariotexture);
+	mario.setPosition({ 32, 128 });
 
 	while (window.isOpen()) {
 		while (const std::optional event = window.pollEvent()) {
 			if (event->is<sf::Event::Closed>())
 				window.close();
 		}
-		grass.setPosition({ 0,416 });
+
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left))
+		{
+			// left key is pressed: move our character
+			mario.move({ -7.5f, 0.f });
+		}
+
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right))
+		{
+			// right key is pressed: move our character
+			mario.move({ 7.5f, 0.f });
+		}
+
+		marioCollisionFoot(mario, mariofoot);
+
 		window.clear();
-		window.draw(grass);
+		for (const auto& i : grass) {
+			window.draw(i);
+		}
+		window.draw(mario);
 		window.display();
 	}
 }
