@@ -36,7 +36,8 @@ bool isCollide(const sf::FloatRect& hitbox, const sf::Sprite& sprite, const sf::
 void marioCollisionFoot(sf::Sprite& mario, const sf::FloatRect& other) {
 	sf::FloatRect block({ 0, 0 }, { 32, 32 });
 
-	Yvelocity += 0.5f;
+	Yvelocity += (Yvelocity < 10.0f ? 1.0f : 0.0f);
+	if (Yvelocity > 10.0f) Yvelocity = 10.0f;
 	mario.move({ 0.f, Yvelocity });
 
 	for (const auto& i : grass) {
@@ -61,7 +62,7 @@ void marioCollisionLeft(sf::Sprite& mario, const sf::FloatRect& other) {
 	sf::FloatRect block({ 0, 0 }, { 32, 32 });
 	bool flag = false;
 	for (const auto& i : blockorange) {
-		if (isCollide(other, mario, getGlobalHitbox(block, i)) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left)) {
+		if (isCollide(other, mario, getGlobalHitbox(block, i)) && (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left) || (!sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right) && !sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left)))) {
 			flag = true;
 			mario.move({ Xvelocity, 0.f });
 			Xvelocity = 0.0f;
@@ -69,7 +70,7 @@ void marioCollisionLeft(sf::Sprite& mario, const sf::FloatRect& other) {
 		}
 	}
 	for (const auto& i : grass) {
-		if (isCollide(other, mario, getGlobalHitbox(block, i)) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left)) {
+		if (isCollide(other, mario, getGlobalHitbox(block, i)) && (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left) || (!sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right) && !sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left)))) {
 			flag = true;
 			mario.move({ Xvelocity, 0.f });
 			Xvelocity = 0.0f;
@@ -82,7 +83,7 @@ void marioCollisionRight(sf::Sprite& mario, const sf::FloatRect& other) {
 	sf::FloatRect block({ 0, 0 }, { 32, 32 });
 	bool flag = false;
 	for (const auto& i : blockorange) {
-		if (isCollide(other, mario, getGlobalHitbox(block, i)) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right)) {
+		if (isCollide(other, mario, getGlobalHitbox(block, i)) && (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right) || (!sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right) && !sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left)))) {
 			flag = true;
 			mario.move({ -Xvelocity, 0.f });
 			Xvelocity = 0.0f;
@@ -90,7 +91,7 @@ void marioCollisionRight(sf::Sprite& mario, const sf::FloatRect& other) {
 		}
 	}
 	for (const auto& i : grass) {
-		if (isCollide(other, mario, getGlobalHitbox(block, i)) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right)) {
+		if (isCollide(other, mario, getGlobalHitbox(block, i)) && (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right) || (!sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right) && !sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left)))) {
 			flag = true;
 			mario.move({ -Xvelocity, 0.f });
 			Xvelocity = 0.0f;
@@ -107,9 +108,10 @@ void MarioMovement() {
 	if (CanMarioControl) {
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left) && !sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right) && window.hasFocus())
 		{
-			if (!MarioDirection) {
-				MarioDirection = true;
-				Xvelocity = 1.0f;
+			if (Xvelocity == 0.0f) MarioDirection = true;
+			else if (!MarioDirection) {
+				Xvelocity -= (Xvelocity <= 0.0f ? 0.0f : 0.375f);
+				mario.move({ Xvelocity, 0.f });
 			}
 			// left key is pressed: move our character
 			if (MarioDirection && !MarioCurrentTouchBlockLeft) {
@@ -119,9 +121,10 @@ void MarioMovement() {
 		}
 		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right) && !sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left) && window.hasFocus())
 		{
-			if (MarioDirection) {
-				MarioDirection = false;
-				Xvelocity = 1.0f;
+			if (Xvelocity == 0.0f) MarioDirection = false;
+			else if (MarioDirection) {
+				Xvelocity -= (Xvelocity <= 0.0f ? 0.0f : 0.375f);
+				mario.move({ -Xvelocity, 0.f });
 			}
 			// right key is pressed: move our character
 			if (!MarioDirection && !MarioCurrentTouchBlockRight) {
@@ -129,12 +132,20 @@ void MarioMovement() {
 				mario.move({ Xvelocity, 0.f });
 			}
 		}
-		else if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right) && !sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left)) {
-			Xvelocity = 0.0f;
+		else if ((!sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right) && !sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left)) || (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left))) {
+			Xvelocity -= (Xvelocity <= 0.0f ? 0.0f : 0.125f);
+			if (!MarioDirection) mario.move({ Xvelocity, 0.0f });
+			else mario.move({ -Xvelocity, 0.0f });
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Z) && !MarioCurrentFalling) {
 			Yvelocity = -13.5f;
 			MarioCurrentFalling = true;
 		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Z) && window.hasFocus()) {
+			if (Xvelocity < 5.0f && Yvelocity < 0.0f) Yvelocity -= 0.4f;
+			if (Xvelocity >= 5.0f && Yvelocity < 0.0f) Yvelocity -= 0.5f;
+			//if (Yvelo >= 0.0f && !Holding) PreJump = true;
+		}
+		if (Xvelocity < 0.0f) Xvelocity = 0.0f;
 	}
 }

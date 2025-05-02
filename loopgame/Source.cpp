@@ -18,6 +18,12 @@ int main()
 		blockorange.push_back(sf::Sprite(tileset, sf::IntRect({ 0, 64 }, { 32, 32 })));
 		blockorange.back().setPosition(sf::Vector2f({ 128 + i * 32.0f,384.0f }));
 	}
+	blockorange.push_back(sf::Sprite(tileset, sf::IntRect({ 0, 64 }, { 32, 32 })));
+	blockorange.back().setPosition(sf::Vector2f({ 128.0f ,352.0f }));
+	blockorange.push_back(sf::Sprite(tileset, sf::IntRect({ 0, 64 }, { 32, 32 })));
+	blockorange.back().setPosition(sf::Vector2f({ 128.0f ,320.0f }));
+	blockorange.push_back(sf::Sprite(tileset, sf::IntRect({ 0, 64 }, { 32, 32 })));
+	blockorange.back().setPosition(sf::Vector2f({ 128.0f ,288.0f }));
 	grass.push_back(sf::Sprite(tileset, sf::IntRect({ 0, 0 }, { 32, 32 })));
 	grass.back().setPosition({ 0,416 });
 	grass.push_back(sf::Sprite(tileset, sf::IntRect({ 0, 32 }, { 32, 32 })));
