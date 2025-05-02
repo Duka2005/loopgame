@@ -1,10 +1,11 @@
 #include <SFML/Graphics.hpp>
 #include "Headers/Mario.hpp"
 #include "Headers/Tileset.hpp"
+#include "Headers/Window.hpp"
 
 int main()
 {
-	sf::RenderWindow window(sf::VideoMode({ 640, 480 }), "Mario Runner!");
+	sf::RenderTexture rTexture({ 640, 480 });
 
 	SetMarioPosition(32, 128);
 
@@ -44,14 +45,17 @@ int main()
 		marioCollisionLeft(mario, marioleft);
 		marioCollisionRight(mario, marioright);
 
-		window.clear();
+		rTexture.clear();
 		for (const auto& i : grass) {
-			window.draw(i);
+			rTexture.draw(i);
 		}
 		for (const auto& i : blockorange) {
-			window.draw(i);
+			rTexture.draw(i);
 		}
-		window.draw(mario);
+		rTexture.draw(mario);
+		rTexture.display();
+		window.clear();
+		window.draw(sf::Sprite(rTexture.getTexture()));
 		window.display();
 	}
 }

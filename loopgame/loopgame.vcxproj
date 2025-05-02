@@ -138,10 +138,12 @@
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="Sources\Mario.cpp" />
     <ClCompile Include="Sources\Tileset.cpp" />
+    <ClCompile Include="Sources\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Headers\Mario.hpp" />
     <ClInclude Include="Headers\Tileset.hpp" />
+    <ClInclude Include="Headers\Window.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

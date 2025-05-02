@@ -1,6 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include "../Headers/Mario.hpp"
 #include "../Headers/Tileset.hpp"
+#include "../Headers/Window.hpp"
 
 #include <iostream>
 
@@ -62,8 +63,16 @@ void marioCollisionLeft(sf::Sprite& mario, const sf::FloatRect& other) {
 	for (const auto& i : blockorange) {
 		if (isCollide(other, mario, getGlobalHitbox(block, i)) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left)) {
 			flag = true;
-			Xvelocity = 0.0f;
 			mario.move({ Xvelocity, 0.f });
+			Xvelocity = 0.0f;
+			break;
+		}
+	}
+	for (const auto& i : grass) {
+		if (isCollide(other, mario, getGlobalHitbox(block, i)) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left)) {
+			flag = true;
+			mario.move({ Xvelocity, 0.f });
+			Xvelocity = 0.0f;
 			break;
 		}
 	}
@@ -75,8 +84,16 @@ void marioCollisionRight(sf::Sprite& mario, const sf::FloatRect& other) {
 	for (const auto& i : blockorange) {
 		if (isCollide(other, mario, getGlobalHitbox(block, i)) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right)) {
 			flag = true;
+			mario.move({ -Xvelocity, 0.f });
 			Xvelocity = 0.0f;
-			mario.move({ Xvelocity, 0.f });
+			break;
+		}
+	}
+	for (const auto& i : grass) {
+		if (isCollide(other, mario, getGlobalHitbox(block, i)) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right)) {
+			flag = true;
+			mario.move({ -Xvelocity, 0.f });
+			Xvelocity = 0.0f;
 			break;
 		}
 	}
@@ -88,7 +105,7 @@ void marioCollisionHead(sf::Sprite& mario, const sf::FloatRect& other) {
 
 void MarioMovement() {
 	if (CanMarioControl) {
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left) && !sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right))
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left) && !sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right) && window.hasFocus())
 		{
 			if (!MarioDirection) {
 				MarioDirection = true;
@@ -100,7 +117,7 @@ void MarioMovement() {
 				mario.move({ -Xvelocity, 0.f });
 			}
 		}
-		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right) && !sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left))
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right) && !sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left) && window.hasFocus())
 		{
 			if (MarioDirection) {
 				MarioDirection = false;
