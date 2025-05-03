@@ -10,8 +10,7 @@ int main()
 	timestep.setStep(1.0f / 500.0f);
 	timestep.setMaxAccumulation(1.0f / 40.0f);
 
-	sf::RenderTexture rTexture({ 640, 480 });
-
+	MarioInit();
 	SetMarioPosition(32, 128);
 
 	for (int i = 0; i < 6; ++i)
@@ -45,6 +44,8 @@ int main()
 			MarioHorizonUpdate(dt);
 			MarioVerticleUpdate(dt);
 		}
+
+		updateAnimation();
 
 		//marioCollisionLeft(mario, marioleft);
 		//marioCollisionRight(mario, marioright);

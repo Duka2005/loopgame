@@ -3,5 +3,6 @@
 #define WINDOW_HPP
 
 extern sf::RenderWindow window;
+extern sf::RenderTexture rTexture;
 
 #endif

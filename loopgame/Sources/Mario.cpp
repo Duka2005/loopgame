@@ -3,11 +3,14 @@
 #include "../Headers/Tileset.hpp"
 #include "../Headers/Window.hpp"
 #include "../Headers/Sound.hpp"
+#include "../Headers/LocalAnimationManager.hpp"
 
 #include <iostream>
 
 sf::Texture mariotexture("Resources/Image/SmallMario.png");
 sf::Sprite mario(mariotexture);
+
+LocalAnimationManager MarioAnimation;
 
 bool CanMarioControl = true;
 bool MarioCurrentFalling = true;
@@ -21,11 +24,13 @@ bool MarioDirection = FirstMarioDirection;
 float Xvelocity = 0.0f;
 float Yvelocity = 0.0f;
 float mario_speed;
+int MarioState = 0;
+int lastMarioState = -1;
 
-sf::FloatRect mariofoot({ 1,29 }, { 22,2 });
-sf::FloatRect marioleft({ -1,1 }, { 2,27 });
-sf::FloatRect marioright({ 22,1 }, { 2,27 });
-sf::FloatRect mariohead({ 1,-1 }, { 22,2 });
+sf::FloatRect mariofoot({ 1 + 4 ,29 }, { 22,2 });
+sf::FloatRect marioleft({ -1 + 4,1 }, { 2,27 });
+sf::FloatRect marioright({ 22 + 4,1 }, { 2,27 });
+sf::FloatRect mariohead({ 1 + 4,-1 }, { 22,2 });
 
 void SetMarioPosition(float x, float y) {
 	mario.setPosition({ x, y });
@@ -67,14 +72,14 @@ void MarioVerticleUpdate(float dt) {
 
 	if (pos.y != -1) {
 		MarioCurrentFalling = false;
-		mario.setPosition({ mario.getPosition().x, pos.y - 30.0f });
+		mario.setPosition({ mario.getPosition().x, pos.y - 31.0f + 28.0f });
 		Yvelocity = 0.0f;
 	}
 	else MarioCurrentFalling = true;
 
 	pos = CheckMarioCollision(mario, mariohead);
 	if (pos.y != -1) {
-		mario.setPosition({ mario.getPosition().x, pos.y + 33.0f });
+		mario.setPosition({ mario.getPosition().x, pos.y + 33.0f + 28.0f });
 		Yvelocity = 0.0f;
 	}
 }
@@ -85,7 +90,7 @@ void MarioHorizonUpdate(float dt) {
 	sf::Vector2f pos = CheckMarioCollision(mario, marioright);
 	if (pos.x != -1) {
 		MarioCurrentTouchBlockRight = true;
-		mario.setPosition({ pos.x - 24.0f, mario.getPosition().y });
+		mario.setPosition({ pos.x - 24.0f + 7.0f, mario.getPosition().y });
 		Xvelocity = 0.0f;
 	}
 	else MarioCurrentTouchBlockRight = false;
@@ -94,7 +99,7 @@ void MarioHorizonUpdate(float dt) {
 	pos = CheckMarioCollision(mario, marioleft);
 	if (pos.x != -1) {
 		MarioCurrentTouchBlockLeft = true;
-		mario.setPosition({ pos.x + 33.0f, mario.getPosition().y });
+		mario.setPosition({ pos.x + 33.0f + 7.0f, mario.getPosition().y });
 		Xvelocity = 0.0f;
 	}
 	else MarioCurrentTouchBlockLeft = false;
@@ -175,5 +180,45 @@ void MarioMovement(float dt) {
 		else mario_speed = 4.375f;
 		if (!MarioCurrentFalling && PreJump) PreJump = false;
 		if (Xvelocity < 0.0f) Xvelocity = 0.0f;
+	}
+}
+
+void MarioInit() {
+	mario.setOrigin({ 11, 28 });
+}
+
+void updateAnimation() {
+	int ypos = (!MarioDirection) ? 0 : 1;
+	if (CanMarioControl) {
+		if (MarioCurrentFalling) {
+			MarioState = 2;
+			if (lastMarioState != MarioState && MarioState != 4) {
+				MarioAnimation.setAnimation(3, 3, 31, 31, ypos, 100);
+				lastMarioState = MarioState;
+			}
+			MarioAnimation.setYPos(ypos);
+			MarioAnimation.update(mario);
+		}
+		else if (Yvelocity == 0.0f && !(!MarioCurrentFalling && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down))) {
+			if (Xvelocity == 0.0f) {
+				MarioState = 0;
+				if (lastMarioState != MarioState && MarioState != 4) {
+					MarioAnimation.setAnimation(2, 2, 31, 31, ypos, 0);
+					lastMarioState = MarioState;
+				}
+				MarioAnimation.setYPos(ypos);
+				MarioAnimation.update(mario);
+			}
+			else {
+				MarioState = 1;
+				if (lastMarioState != MarioState && MarioState != 4) {
+					MarioAnimation.setAnimation(0, 2, 31, 31, ypos);
+					lastMarioState = MarioState;
+				}
+				MarioAnimation.setYPos(ypos);
+				MarioAnimation.setFrequency(std::max(12.0f, std::min(Xvelocity * 6.0f, 45.0f)));
+				MarioAnimation.update(mario);
+			}
+		}
 	}
 }

@@ -2,8 +2,6 @@
 #ifndef MARIO_HPP
 #define MARIO_HPP
 
-#include <SFML/Graphics.hpp>
-
 extern sf::Texture mariotexture;
 extern sf::Sprite mario;
 
@@ -22,5 +20,7 @@ extern sf::FloatRect getGlobalHitbox(const sf::FloatRect& hitbox, const sf::Spri
 extern bool isCollide(const sf::FloatRect& hitbox, const sf::Sprite& sprite, const sf::FloatRect& other);
 extern void MarioVerticleUpdate(float dt);
 extern void MarioHorizonUpdate(float dt);
+extern void updateAnimation();
+extern void MarioInit();
 
 #endif
