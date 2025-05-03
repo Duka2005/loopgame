@@ -2,14 +2,18 @@
 #include "Headers/Mario.hpp"
 #include "Headers/Tileset.hpp"
 #include "Headers/Window.hpp"
+#include "Headers/Kairos.hpp"
 
 int main()
 {
+	kairos::Timestep timestep;
+	timestep.setStep(1.0f / 500.0f);
+	timestep.setMaxAccumulation(1.0f / 40.0f);
+
 	sf::RenderTexture rTexture({ 640, 480 });
 
 	SetMarioPosition(32, 128);
 
-	window.setFramerateLimit(50);
 	for (int i = 0; i < 6; ++i) {
 		obstacles.push_back(sf::Sprite(tileset, sf::IntRect({ 0, 64 }, { 32, 32 })));
 		obstacles.back().setPosition(sf::Vector2f({ 128 + i * 32.0f,384.0f }));
@@ -20,6 +24,10 @@ int main()
 	obstacles.back().setPosition(sf::Vector2f({ 128.0f ,320.0f }));
 	obstacles.push_back(sf::Sprite(tileset, sf::IntRect({ 0, 64 }, { 32, 32 })));
 	obstacles.back().setPosition(sf::Vector2f({ 128.0f ,288.0f }));
+	obstacles.push_back(sf::Sprite(tileset, sf::IntRect({ 0, 64 }, { 32, 32 })));
+	obstacles.back().setPosition(sf::Vector2f({ 128.0f + 128.0f,288.0f }));
+	obstacles.push_back(sf::Sprite(tileset, sf::IntRect({ 0, 64 }, { 32, 32 })));
+	obstacles.back().setPosition(sf::Vector2f({ 128.0f + 128.0f + 32.0f,288.0f }));
 	obstacles.push_back(sf::Sprite(tileset, sf::IntRect({ 0, 64 }, { 32, 32 })));
 	obstacles.back().setPosition(sf::Vector2f({ 128.0f + 64.0f ,352.0f }));
 	obstacles.push_back(sf::Sprite(tileset, sf::IntRect({ 0, 0 }, { 32, 32 })));
@@ -43,10 +51,14 @@ int main()
 				window.close();
 		}
 
-		MarioMovement();
+		timestep.addFrame();
+		while (timestep.isUpdateRequired()) {
+			float dt = timestep.getStepAsFloat() * 50.0f;
+			MarioMovement(dt);
+			MarioHorizonUpdate();
+			MarioVerticleUpdate(dt);
+		}
 
-		MarioHorizonUpdate();
-		MarioVerticleUpdate();
 		//marioCollisionLeft(mario, marioleft);
 		//marioCollisionRight(mario, marioright);
 
