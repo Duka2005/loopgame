@@ -10,13 +10,18 @@ extern sf::Sprite mario;
 extern bool CanMarioControl, FirstMarioDirection, MarioDirection, MarioCurrentFalling;
 extern float Xvelocity, Yvelocity;
 
+extern sf::FloatRect mariofoot;
+extern sf::FloatRect marioleft;
+extern sf::FloatRect marioright;
+
 extern void MarioMovement();
 extern void SetMarioPosition(float x, float y);
 extern void setHitbox(sf::FloatRect& hitbox, const sf::FloatRect& Sethitbox);
 extern sf::FloatRect getGlobalHitbox(const sf::FloatRect& hitbox, const sf::Vector2f& pos);
 extern sf::FloatRect getGlobalHitbox(const sf::FloatRect& hitbox, const sf::Sprite& sprite);
 extern bool isCollide(const sf::FloatRect& hitbox, const sf::Sprite& sprite, const sf::FloatRect& other);
-extern void marioCollisionFoot(sf::Sprite& mario, const sf::FloatRect& other);
+extern void MarioVerticleUpdate();
+extern void MarioHorizonUpdate();
 extern void marioCollisionLeft(sf::Sprite& mario, const sf::FloatRect& other);
 extern void marioCollisionRight(sf::Sprite& mario, const sf::FloatRect& other);
 extern void marioCollisionHead(sf::Sprite& mario, const sf::FloatRect& other);

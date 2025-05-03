@@ -2,8 +2,7 @@
 #ifndef TILESET_HPP
 #define TILESET_HPP
 
-extern std::vector<sf::Sprite> grass;
-extern std::vector<sf::Sprite> blockorange;
+extern std::vector<sf::Sprite> obstacles;
 
 extern sf::Texture tileset;
 

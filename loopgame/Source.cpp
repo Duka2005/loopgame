@@ -9,35 +9,33 @@ int main()
 
 	SetMarioPosition(32, 128);
 
-	sf::FloatRect mariofoot({ 1,28 }, { 22,3 });
-	sf::FloatRect marioleft({ -1,1 }, { 2,27 });
-	sf::FloatRect marioright({ 21,1 }, { 2,27 });
-
 	window.setFramerateLimit(50);
 	for (int i = 0; i < 6; ++i) {
-		blockorange.push_back(sf::Sprite(tileset, sf::IntRect({ 0, 64 }, { 32, 32 })));
-		blockorange.back().setPosition(sf::Vector2f({ 128 + i * 32.0f,384.0f }));
+		obstacles.push_back(sf::Sprite(tileset, sf::IntRect({ 0, 64 }, { 32, 32 })));
+		obstacles.back().setPosition(sf::Vector2f({ 128 + i * 32.0f,384.0f }));
 	}
-	blockorange.push_back(sf::Sprite(tileset, sf::IntRect({ 0, 64 }, { 32, 32 })));
-	blockorange.back().setPosition(sf::Vector2f({ 128.0f ,352.0f }));
-	blockorange.push_back(sf::Sprite(tileset, sf::IntRect({ 0, 64 }, { 32, 32 })));
-	blockorange.back().setPosition(sf::Vector2f({ 128.0f ,320.0f }));
-	blockorange.push_back(sf::Sprite(tileset, sf::IntRect({ 0, 64 }, { 32, 32 })));
-	blockorange.back().setPosition(sf::Vector2f({ 128.0f ,288.0f }));
-	grass.push_back(sf::Sprite(tileset, sf::IntRect({ 0, 0 }, { 32, 32 })));
-	grass.back().setPosition({ 0,416 });
-	grass.push_back(sf::Sprite(tileset, sf::IntRect({ 0, 32 }, { 32, 32 })));
-	grass.back().setPosition({ 0,448 });
+	obstacles.push_back(sf::Sprite(tileset, sf::IntRect({ 0, 64 }, { 32, 32 })));
+	obstacles.back().setPosition(sf::Vector2f({ 128.0f ,352.0f }));
+	obstacles.push_back(sf::Sprite(tileset, sf::IntRect({ 0, 64 }, { 32, 32 })));
+	obstacles.back().setPosition(sf::Vector2f({ 128.0f ,320.0f }));
+	obstacles.push_back(sf::Sprite(tileset, sf::IntRect({ 0, 64 }, { 32, 32 })));
+	obstacles.back().setPosition(sf::Vector2f({ 128.0f ,288.0f }));
+	obstacles.push_back(sf::Sprite(tileset, sf::IntRect({ 0, 64 }, { 32, 32 })));
+	obstacles.back().setPosition(sf::Vector2f({ 128.0f + 64.0f ,352.0f }));
+	obstacles.push_back(sf::Sprite(tileset, sf::IntRect({ 0, 0 }, { 32, 32 })));
+	obstacles.back().setPosition({ 0,416 });
+	obstacles.push_back(sf::Sprite(tileset, sf::IntRect({ 0, 32 }, { 32, 32 })));
+	obstacles.back().setPosition({ 0,448 });
 	for (int i = 0; i < 18; ++i) {
-		grass.push_back(sf::Sprite(tileset, sf::IntRect({ 32, 0 }, { 32, 32 })));
-		grass.back().setPosition(sf::Vector2f({ 32.0f + i * 32.0f,416.0f }));
-		grass.push_back(sf::Sprite(tileset, sf::IntRect({ 32, 32 }, { 32, 32 })));
-		grass.back().setPosition(sf::Vector2f({ 32.0f + i * 32.0f,448.0f }));
+		obstacles.push_back(sf::Sprite(tileset, sf::IntRect({ 32, 0 }, { 32, 32 })));
+		obstacles.back().setPosition(sf::Vector2f({ 32.0f + i * 32.0f,416.0f }));
+		obstacles.push_back(sf::Sprite(tileset, sf::IntRect({ 32, 32 }, { 32, 32 })));
+		obstacles.back().setPosition(sf::Vector2f({ 32.0f + i * 32.0f,448.0f }));
 	}
-	grass.push_back(sf::Sprite(tileset, sf::IntRect({ 64, 0 }, { 32, 32 })));
-	grass.back().setPosition(sf::Vector2f({ 32.0f + 18 * 32.0f,416.0f }));
-	grass.push_back(sf::Sprite(tileset, sf::IntRect({ 64, 32 }, { 32, 32 })));
-	grass.back().setPosition(sf::Vector2f({ 32.0f + 18 * 32.0f,448.0f }));
+	obstacles.push_back(sf::Sprite(tileset, sf::IntRect({ 64, 0 }, { 32, 32 })));
+	obstacles.back().setPosition(sf::Vector2f({ 32.0f + 18 * 32.0f,416.0f }));
+	obstacles.push_back(sf::Sprite(tileset, sf::IntRect({ 64, 32 }, { 32, 32 })));
+	obstacles.back().setPosition(sf::Vector2f({ 32.0f + 18 * 32.0f,448.0f }));
 
 	while (window.isOpen()) {
 		while (const std::optional event = window.pollEvent()) {
@@ -47,15 +45,13 @@ int main()
 
 		MarioMovement();
 
-		marioCollisionFoot(mario, mariofoot);
-		marioCollisionLeft(mario, marioleft);
-		marioCollisionRight(mario, marioright);
+		MarioHorizonUpdate();
+		MarioVerticleUpdate();
+		//marioCollisionLeft(mario, marioleft);
+		//marioCollisionRight(mario, marioright);
 
 		rTexture.clear();
-		for (const auto& i : grass) {
-			rTexture.draw(i);
-		}
-		for (const auto& i : blockorange) {
+		for (const auto& i : obstacles) {
 			rTexture.draw(i);
 		}
 		rTexture.draw(mario);
