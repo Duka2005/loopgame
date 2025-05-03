@@ -2,10 +2,11 @@
 #include "../Headers/Mario.hpp"
 #include "../Headers/Tileset.hpp"
 #include "../Headers/Window.hpp"
+#include "../Headers/Sound.hpp"
 
 #include <iostream>
 
-sf::Texture mariotexture("Resources/SmallMario.png");
+sf::Texture mariotexture("Resources/Image/SmallMario.png");
 sf::Sprite mario(mariotexture);
 
 bool CanMarioControl = true;
@@ -13,9 +14,13 @@ bool MarioCurrentFalling = true;
 bool MarioCurrentTouchBlockLeft = false;
 bool MarioCurrentTouchBlockRight = false;
 bool FirstMarioDirection = false;
+bool PreJump = false;
+bool Holding;
+bool OverSpeed = false;
 bool MarioDirection = FirstMarioDirection;
 float Xvelocity = 0.0f;
 float Yvelocity = 0.0f;
+float mario_speed;
 
 sf::FloatRect mariofoot({ 1,29 }, { 22,2 });
 sf::FloatRect marioleft({ -1,1 }, { 2,27 });
@@ -73,7 +78,7 @@ void MarioVerticleUpdate(float dt) {
 		Yvelocity = 0.0f;
 	}
 }
-void MarioHorizonUpdate() {
+void MarioHorizonUpdate(float dt) {
 	sf::FloatRect block({ 0, 0 }, { 32, 32 });
 
 	// kiem tra ben phai
@@ -93,6 +98,18 @@ void MarioHorizonUpdate() {
 		Xvelocity = 0.0f;
 	}
 	else MarioCurrentTouchBlockLeft = false;
+
+	if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Key::X) && Xvelocity > 4.475f) {
+		OverSpeed = true;
+	}
+	if (Xvelocity > mario_speed && !sf::Keyboard::isKeyPressed(sf::Keyboard::Key::X)) {
+		if (OverSpeed) {
+			Xvelocity -= 0.125f * dt;
+			if (Xvelocity <= mario_speed) OverSpeed = false;
+		}
+		else Xvelocity = mario_speed;
+	}
+	if (Xvelocity > 7.5f && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::X)) Xvelocity = 7.5f;
 }
 void MarioMovement(float dt) {
 	if (CanMarioControl) {
@@ -104,9 +121,11 @@ void MarioMovement(float dt) {
 				Xvelocity -= (Xvelocity <= 0.0f ? 0.0f : 0.375f * dt);
 				mario.move({ Xvelocity * dt, 0.f });
 			}
+			// init
+			if (Xvelocity < 1.0f && MarioDirection) Xvelocity = 1.0f;
 			// nhan vat di chuyen khi nhan phim Left
 			if (MarioDirection && !MarioCurrentTouchBlockRight) {
-				Xvelocity += (Xvelocity > 7.5f ? 0.0f : 0.125f * dt);
+				Xvelocity += (Xvelocity > mario_speed ? 0.0f : 0.125f * dt);
 				mario.move({ -Xvelocity * dt, 0.f });
 			}
 		}
@@ -118,9 +137,11 @@ void MarioMovement(float dt) {
 				Xvelocity -= (Xvelocity <= 0.0f ? 0.0f : 0.375f * dt);
 				mario.move({ -Xvelocity * dt, 0.f });
 			}
+			// init
+			if (Xvelocity < 1.0f && !MarioDirection) Xvelocity = 1.0f;
 			// nhan vat di chuyen khi nhan phim Right
 			if (!MarioDirection && !MarioCurrentTouchBlockLeft) {
-				Xvelocity += (Xvelocity > 7.5f ? 0.0f : 0.125f * dt);
+				Xvelocity += (Xvelocity > mario_speed ? 0.0f : 0.125f * dt);
 				mario.move({ Xvelocity * dt, 0.f });
 			}
 		}
@@ -129,15 +150,30 @@ void MarioMovement(float dt) {
 			if (!MarioDirection) mario.move({ Xvelocity * dt, 0.0f });
 			else mario.move({ -Xvelocity * dt, 0.0f });
 		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Z) && !MarioCurrentFalling) {
-			Yvelocity = -13.5f;
-			MarioCurrentFalling = true;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Z) && !MarioCurrentFalling && window.hasFocus()) {
+			if (!PreJump && !Holding) {
+				jump.play();
+				Yvelocity = -13.5f;
+				MarioCurrentFalling = true;
+				Holding = true;
+			}
+			else if (PreJump) {
+				jump.play();
+				Yvelocity = -13.5f;
+				MarioCurrentFalling = true;
+				PreJump = false;
+				Holding = true;
+			}
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Z) && window.hasFocus()) {
 			if (Xvelocity < 5.0f && Yvelocity < 0.0f) Yvelocity -= 0.4f * dt;
 			if (Xvelocity >= 5.0f && Yvelocity < 0.0f) Yvelocity -= 0.5f * dt;
-			//if (Yvelo >= 0.0f && !Holding) PreJump = true;
+			if (Yvelocity >= 0.0f && !Holding) PreJump = true;
 		}
+		if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Z) && window.hasFocus()) Holding = false;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::X) && window.hasFocus()) mario_speed = 7.5f;
+		else mario_speed = 4.375f;
+		if (!MarioCurrentFalling && PreJump) PreJump = false;
 		if (Xvelocity < 0.0f) Xvelocity = 0.0f;
 	}
 }

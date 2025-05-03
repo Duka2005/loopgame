@@ -21,6 +21,6 @@ extern sf::FloatRect getGlobalHitbox(const sf::FloatRect& hitbox, const sf::Vect
 extern sf::FloatRect getGlobalHitbox(const sf::FloatRect& hitbox, const sf::Sprite& sprite);
 extern bool isCollide(const sf::FloatRect& hitbox, const sf::Sprite& sprite, const sf::FloatRect& other);
 extern void MarioVerticleUpdate(float dt);
-extern void MarioHorizonUpdate();
+extern void MarioHorizonUpdate(float dt);
 
 #endif
