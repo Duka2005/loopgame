@@ -45,16 +45,7 @@ void ViewInit() {
 	view = sf::View(sf::FloatRect({ 0, 0 }, { 640, 480 }));
 }
 void setView() {
-	//  MouseX - (Width / 2.0f)
-
-	//view.setCenter(player.property.getPosition().x + (Xvelo > 0.0f ? CompareX * deltaTime : 0.0f), Height / 2.0f);
-	//view.setCenter({ player.property.getPosition().x, player.property.getPosition().y });
-
 	viewwin = getLetterboxView(view, window.getSize().x, window.getSize().y);
 	view.setCenter({ std::max(640 / 2.0f, mario.getPosition().x), std::min(std::max(480 / 2.0f, mario.getPosition().y), 480 - 240.0f) });
 	viewwin.setCenter(sf::Vector2f({ 640 / 2, 480 / 2 }));
-
-	//view.setCenter(player.property.getPosition());
-
-	//view.setCenter({ std::min(std::max(Width / 2.0f, player.property.getPosition().x + (MouseX - Width / 2.0f) * 0.1f), LevelWidth / 2.0f), std::min(std::max(Height / 2.0f, player.property.getPosition().y), LevelHeight / 2.0f) });
 }
