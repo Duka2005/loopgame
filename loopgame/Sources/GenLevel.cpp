@@ -62,6 +62,26 @@ void GenLevel(){
                 tile_x.push_back(0.0f);
                 tile_y.push_back(64.0f);
             }
+            else if (block_names == "Pipe 001")
+            {
+                tile_x.push_back(96.0f);
+                tile_y.push_back(0.0f);
+            }
+            else if (block_names == "Pipe 002")
+            {
+                tile_x.push_back(128.0f);
+                tile_y.push_back(0.0f);
+            }
+            else if (block_names == "Pipe 003")
+            {
+                tile_x.push_back(96.0f);
+                tile_y.push_back(32.0f);
+            }
+            else if (block_names == "Pipe 004")
+            {
+                tile_x.push_back(128.0f);
+                tile_y.push_back(32.0f);
+            }
         }
         else if (std::regex_match(line, match, x_regex)) {
             block_x.push_back(std::stof(match[2].str()));
