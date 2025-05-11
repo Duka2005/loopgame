@@ -158,13 +158,13 @@ void MarioMovement(float dt) {
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Z) && !MarioCurrentFalling && window.hasFocus()) {
 			if (!PreJump && !Holding) {
 				jump.play();
-				Yvelocity = -13.5f;
+				Yvelocity = -14.0f;
 				MarioCurrentFalling = true;
 				Holding = true;
 			}
 			else if (PreJump) {
 				jump.play();
-				Yvelocity = -13.5f;
+				Yvelocity = -14.0f;
 				MarioCurrentFalling = true;
 				PreJump = false;
 				Holding = true;
