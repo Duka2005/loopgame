@@ -1,15 +1,17 @@
 ﻿#include <iostream>
 #include <fstream>
 #include <string>
-#include <regex>
 #include <vector>
 #include "../Headers/Tileset.hpp"
+#include "../Headers/Level.hpp"
+
+#include <ctre.hpp>
 
 std::string line;
-std::regex block_regex(R"(block_(\d+)=(.*))");
-std::regex x_regex(R"(block_(\d+)_x=(\d+))");
-std::regex y_regex(R"(block_(\d+)_y=(\d+))");
-std::smatch match;
+//std::regex block_regex(R"(block_(\d+)=(.*))");
+//std::regex x_regex(R"(block_(\d+)_x=(\d+))");
+//std::regex y_regex(R"(block_(\d+)_y=(\d+))");
+//std::smatch match;
 
 std::string block_names;
 std::vector<float> tile_x;
@@ -17,16 +19,16 @@ std::vector<float> tile_y;
 std::vector<float> block_x;
 std::vector<float> block_y;
 
-void GenLevel(){
-    std::ifstream inputFile("Levels/level_3.txt");
+void GenLevel(Level& lvl, std::string level, int position) {
+    std::ifstream inputFile(level);
     if (!inputFile.is_open()) {
         std::cerr << "Không thể mở file data.txt" << std::endl;
-        return ;
+        return;
     }
-
+    lvl.pos = position;
     while (std::getline(inputFile, line)) {
-        if (std::regex_match(line, match, block_regex)) {
-            block_names = match[2].str();
+        for (auto& match : ctre::search_all<"block_(\\d+)=(.*)">(line)) {
+            block_names = match.get<2>().to_string();
             if (block_names == "Terrain 001")
             {
                 tile_x.push_back(0.0f);
@@ -83,17 +85,20 @@ void GenLevel(){
                 tile_y.push_back(32.0f);
             }
         }
-        else if (std::regex_match(line, match, x_regex)) {
-            block_x.push_back(std::stof(match[2].str()));
+        for (auto& match : ctre::search_all<"block_(\\d+)_x=(\\d+)">(line)) {
+            block_x.push_back(match.get<2>().to_number());
         }
-        else if (std::regex_match(line, match, y_regex))
-        {
-            block_y.push_back(std::stof(match[2].str()));
+        for (auto& match : ctre::search_all<"block_(\\d+)_y=(\\d+)">(line)) {
+            block_y.push_back(match.get<2>().to_number());
         }
     }
     for (int i = 0; i < block_x.size(); ++i)
     {
-        addObstacleBlock(block_x[i], block_y[i], tile_x[i], tile_y[i]);
+        addObstacleBlock(lvl, position * 1280 + block_x[i], block_y[i], tile_x[i], tile_y[i]);
     }
+    block_x.clear();
+    block_y.clear();
+    tile_x.clear();
+    tile_y.clear();
     inputFile.close();
 }

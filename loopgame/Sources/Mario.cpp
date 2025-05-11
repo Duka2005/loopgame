@@ -52,10 +52,12 @@ bool isCollide(const sf::FloatRect& hitbox, const sf::Sprite& sprite, const sf::
 sf::Vector2f CheckMarioCollision(sf::Sprite& mario, const sf::FloatRect& other) {
 	sf::FloatRect block({ 0, 0 }, { 32, 32 });
 	sf::Vector2f pos({ -1, -1 });
-	for (const auto& i : obstacles) {
-		if (isCollide(other, mario, getGlobalHitbox(block, i))) {
-			pos = { i.getPosition().x, i.getPosition().y };
-			break;
+	for (const auto& i : lvldata) {
+		for (const auto& j : i.data) {
+			if (isCollide(other, mario, getGlobalHitbox(block, j))) {
+				pos = { j.getPosition().x, j.getPosition().y };
+				break;
+			}
 		}
 	}
 	return pos;

@@ -20,6 +20,6 @@ extern std::vector<float> tile_y;
 extern std::vector<float> block_x;
 extern std::vector<float> block_y;
 
-extern void GenLevel();
+extern void GenLevel(Level& lvl, std::string level, int position);
 
 #endif
