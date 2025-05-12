@@ -22,7 +22,7 @@ std::vector<float> block_y;
 void GenLevel(Level& lvl, std::string level, int position) {
     std::ifstream inputFile(level);
     if (!inputFile.is_open()) {
-        std::cerr << "Không thể mở file data.txt" << std::endl;
+        std::cerr << "can't open file" << std::endl;
         return;
     }
     lvl.pos = position;
