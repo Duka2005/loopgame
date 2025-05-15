@@ -190,6 +190,10 @@ void MoveFromOffset() {
 		if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right)) Xvelocity = 0.0f;
 		//else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right) && Xvelocity <= 3.0f) mario.setPosition({ initx - 320.0f + 11.0f + (4.0f - Xvelocity), mario.getPosition().y});
 	}
+	else if (mario.getPosition().x >= initx + 320.0f - 18.0f) {
+		mario.setPosition({ initx + 320.0f - 18.0f, mario.getPosition().y });
+		if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left)) Xvelocity = 0.0f;
+	}
 }
 
 void MarioInit() {
