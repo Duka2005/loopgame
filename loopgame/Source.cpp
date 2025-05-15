@@ -4,6 +4,7 @@
 #include "Headers/Window.hpp"
 #include "Headers/Kairos.hpp"
 #include "Headers/GenLevel.hpp"
+#include "Headers/BackgroundColor.hpp"
 
 #include <ctre.hpp>
 
@@ -13,6 +14,7 @@ int main()
 	timestep.setStep(1.0f / 500.0f);
 	timestep.setMaxAccumulation(1.0f / 40.0f);
 
+	BgColorInitColor();
 	MarioInit();
 	ViewInit();
 	LevelInit();
@@ -39,7 +41,9 @@ int main()
 
 		updateAnimation();
 
+		BgColorInitPos();
 		rTexture.clear();
+		rTexture.draw(Backgroundcolor);
 		LevelDraw();
 		setView();
 		rTexture.setView(view);
