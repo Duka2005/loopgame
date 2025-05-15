@@ -22,5 +22,6 @@ extern void MarioVerticleUpdate(float dt);
 extern void MarioHorizonUpdate(float dt);
 extern void updateAnimation();
 extern void MarioInit();
+extern void MoveFromOffset();
 
 #endif

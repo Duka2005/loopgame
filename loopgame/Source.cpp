@@ -26,28 +26,30 @@ int main()
 				window.close();
 		}
 		//Check when to generate map
-		CheckLevelAvaliable();
 		timestep.addFrame();
 		while (timestep.isUpdateRequired()) {
 			float dt = timestep.getStepAsFloat() * 50.0f;
 			MarioMovement(dt);
 			MarioHorizonUpdate(dt);
 			MarioVerticleUpdate(dt);
+			MoveFromOffset();
+			setView(dt);
 		}
-
-		if (mario.getPosition().y > 480 + 32) {
-			window.close();
-		}
+		CheckLevelAvaliable();
+		LevelUpdatePos();
+		updateView();
+		BgColorInitPos();
+		//if (mario.getPosition().y > 480 + 32) {
+		//	window.close();
+		//}
 
 		updateAnimation();
 
-		BgColorInitPos();
 		rTexture.clear();
-		rTexture.draw(Backgroundcolor);
-		LevelDraw();
-		setView();
 		rTexture.setView(view);
 		window.setView(viewwin);
+		rTexture.draw(Backgroundcolor);
+		LevelDraw();
 		rTexture.draw(mario);
 		rTexture.display();
 		window.clear();

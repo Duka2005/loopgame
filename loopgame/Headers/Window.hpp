@@ -9,6 +9,10 @@ extern sf::View viewwin;
 extern sf::View view;
 
 extern void ViewInit();
-extern void setView();
+extern void setView(float dt);
+extern void updateView();
+
+extern float initx;
+extern float speedtime;
 
 #endif

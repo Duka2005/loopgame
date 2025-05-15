@@ -94,7 +94,8 @@ void GenLevel(Level& lvl, std::string level, int position) {
     }
     for (int i = 0; i < block_x.size(); ++i)
     {
-        addObstacleBlock(lvl, position * 1280 + block_x[i], block_y[i], tile_x[i], tile_y[i]);
+        //addObstacleBlock(lvl, position * 1280 + block_x[i], block_y[i], tile_x[i], tile_y[i]);
+        addObstacleBlock(lvl, block_x[i], block_y[i], tile_x[i], tile_y[i]);
     }
     block_x.clear();
     block_y.clear();

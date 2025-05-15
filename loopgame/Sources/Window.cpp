@@ -1,5 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include <algorithm>
+
+#include <iostream>
 #include "../Headers/Window.hpp"
 #include "../Headers/Mario.hpp"
 
@@ -7,6 +9,9 @@ sf::RenderWindow window(sf::VideoMode({ 640, 480 }), "Mario Runner!");
 sf::RenderTexture rTexture({ 640, 480 });
 sf::View viewwin;
 sf::View view;
+
+float speedtime = 2.0f;
+float initx = 320.0f;
 
 sf::View getLetterboxView(sf::View view, int windowWidth, int windowHeight) {
 	// Compares the aspect ratio of the window to the aspect ratio of the view,
@@ -44,8 +49,13 @@ sf::View getLetterboxView(sf::View view, int windowWidth, int windowHeight) {
 void ViewInit() {
 	view = sf::View(sf::FloatRect({ 0, 0 }, { 640, 480 }));
 }
-void setView() {
+void updateView() {
 	viewwin = getLetterboxView(view, window.getSize().x, window.getSize().y);
-	view.setCenter({ std::max(640 / 2.0f, mario.getPosition().x), std::min(std::max(480 / 2.0f, mario.getPosition().y), 480 - 240.0f) });
+	//view.setCenter({ std::max(640 / 2.0f, initx), std::min(std::max(480 / 2.0f, mario.getPosition().y), 480 - 240.0f) });
+	view.setCenter({ initx, 240.0f});
 	viewwin.setCenter(sf::Vector2f({ 640 / 2, 480 / 2 }));
+}
+void setView(float dt) {
+	initx += dt * speedtime;
+	//std::cout << initx << "\n";
 }
