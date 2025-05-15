@@ -31,6 +31,7 @@ void Level::UpdateTilePosition() {
 		data[i].setPosition(sf::Vector2f({ this->origin_pos[i].x + this->pos * 1280.0f , this->origin_pos[i].y}));
 }
 
+//make a random number
 int RandomUntilUnique() {
 	int ran = dist(rd);
 	while (global_prev == ran) {
@@ -39,6 +40,8 @@ int RandomUntilUnique() {
 	global_prev = ran;
 	return ran;
 }
+
+//level map starter when game is start
 void LevelInit() {
 	lvldata.push_back(Level());
 	GenLevel(lvldata.back(), PathLvl[0], 0);
@@ -47,6 +50,8 @@ void LevelInit() {
 	lvldata.push_back(Level());
 	GenLevel(lvldata.back(), PathLvl[RandomUntilUnique()], 2);
 }
+
+//generate new level map in bottom
 void CheckLevelAvaliable() {
 	if (initx > (lvldata[0].pos + 2) * 1280) {
 		lvldata.erase(lvldata.begin(), lvldata.begin()+1);
@@ -63,6 +68,8 @@ void LevelUpdatePos() {
 		lvldata[i].UpdateTilePosition();
 	}
 }
+
+//draw level map in screen
 void LevelDraw() {
 	for (const auto& i : lvldata) {
 		for (const auto& j : i.data) {

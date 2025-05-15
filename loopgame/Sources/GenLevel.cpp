@@ -19,6 +19,7 @@ std::vector<float> tile_y;
 std::vector<float> block_x;
 std::vector<float> block_y;
 
+//generate level map function
 void GenLevel(Level& lvl, std::string level, int position) {
     std::ifstream inputFile(level);
     if (!inputFile.is_open()) {
@@ -94,7 +95,6 @@ void GenLevel(Level& lvl, std::string level, int position) {
     }
     for (int i = 0; i < block_x.size(); ++i)
     {
-        //addObstacleBlock(lvl, position * 1280 + block_x[i], block_y[i], tile_x[i], tile_y[i]);
         addObstacleBlock(lvl, block_x[i], block_y[i], tile_x[i], tile_y[i]);
     }
     block_x.clear();
