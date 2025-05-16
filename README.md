@@ -8,6 +8,7 @@ Trò chơi này được phát triển với mục tiêu giúp người dùng c�
 ## Thông Tin
 - **Thông tin thành viên nhóm**:
     - Đỗ Việt Dũng, Mã sinh viên: 23010547
+    - Thiều Quang Vũ, Mã sinh viên: 23010579
 - **Ngôn ngữ lập trình sử dụng**: C++
 
 ## Thư viện sử dụng trong bài tập lớn:
