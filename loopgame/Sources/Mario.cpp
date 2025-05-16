@@ -10,6 +10,9 @@
 sf::Texture mariotexture("Resources/Image/SmallMario.png");
 sf::Sprite mario(mariotexture);
 
+sf::Texture mariodeathtexture("Resources/Image/Death/mario_death.png");
+sf::Sprite mariodeath(mariodeathtexture);
+
 LocalAnimationManager MarioAnimation;
 
 bool CanMarioControl = true;
@@ -184,6 +187,8 @@ void MarioMovement(float dt) {
 		if (Xvelocity < 0.0f) Xvelocity = 0.0f;
 	}
 }
+
+//kiem tra khi nhan vat den dau va cuoi man hinh
 void MoveFromOffset() {
 	if (mario.getPosition().x <= initx - 320.0f + 10.0f) {
 		mario.setPosition({ initx - 320.0f + 10.0f, mario.getPosition().y });
@@ -198,8 +203,10 @@ void MoveFromOffset() {
 
 void MarioInit() {
 	mario.setOrigin({ 11, 28 });
+	mariodeath.setOrigin({ 11, 28 });
 }
 
+// animation cua nhan vat
 void updateAnimation() {
 	int ypos = (!MarioDirection) ? 0 : 1;
 	if (CanMarioControl) {
@@ -233,5 +240,11 @@ void updateAnimation() {
 				MarioAnimation.update(mario);
 			}
 		}
+	}
+	else {
+		MarioAnimation.setAnimation(0, 0, 31, 31, ypos);
+		MarioAnimation.setYPos(ypos);
+		mariodeath.setPosition(mario.getPosition());
+		MarioAnimation.update(mariodeath);
 	}
 }

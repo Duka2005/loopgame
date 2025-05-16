@@ -18,7 +18,7 @@ int main()
 	MarioInit();
 	ViewInit();
 	LevelInit();
-	SetMarioPosition(32, 128);
+	SetMarioPosition(320, 416);
 
 	while (window.isOpen()) {
 		while (const std::optional event = window.pollEvent()) {
@@ -39,9 +39,11 @@ int main()
 		LevelUpdatePos();
 		updateView();
 		BgColorInitPos();
-		//if (mario.getPosition().y > 480 + 32) {
-		//	window.close();
-		//}
+
+		if (mario.getPosition().y > 480 + 32) {
+			CanMarioControl = false;
+			window.close();
+		}
 
 		updateAnimation();
 
@@ -50,7 +52,8 @@ int main()
 		window.setView(viewwin);
 		rTexture.draw(Backgroundcolor);
 		LevelDraw();
-		rTexture.draw(mario);
+		if (CanMarioControl) rTexture.draw(mario);
+		else rTexture.draw(mariodeath);
 		rTexture.display();
 		window.clear();
 		window.draw(sf::Sprite(rTexture.getTexture()));

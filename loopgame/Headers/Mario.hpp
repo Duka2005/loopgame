@@ -4,6 +4,8 @@
 
 extern sf::Texture mariotexture;
 extern sf::Sprite mario;
+extern sf::Texture mariodeathtexture;
+extern sf::Sprite mariodeath;
 
 extern bool CanMarioControl, FirstMarioDirection, MarioDirection, MarioCurrentFalling;
 extern float Xvelocity, Yvelocity;
