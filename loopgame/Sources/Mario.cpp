@@ -29,6 +29,8 @@ float Yvelocity = 0.0f;
 float mario_speed;
 int MarioState = 0;
 int lastMarioState = -1;
+bool isactive = false;
+bool processdeath = false;
 
 sf::FloatRect mariofoot({ 1 + 4 ,29 }, { 22,2 });
 sf::FloatRect marioleft({ -1 + 4,1 }, { 2,27 });
@@ -68,10 +70,11 @@ sf::Vector2f CheckMarioCollision(sf::Sprite& mario, const sf::FloatRect& other) 
 
 void MarioVerticleUpdate(float dt) {
 	sf::FloatRect block({ 0, 0 }, { 32, 32 });
-
-	Yvelocity += (Yvelocity < 10.0f ? 1.0f * dt : 0.0f);
-	if (Yvelocity > 10.0f) Yvelocity = 10.0f;
-	mario.move({ 0.f, Yvelocity * dt });
+	if (!processdeath) {
+		Yvelocity += (Yvelocity < 10.0f ? 1.0f * dt : 0.0f);
+		if (Yvelocity > 10.0f) Yvelocity = 10.0f;
+		mario.move({ 0.f, Yvelocity * dt });
+	}
 
 	sf::Vector2f pos = CheckMarioCollision(mario, mariofoot);
 
@@ -241,10 +244,17 @@ void updateAnimation() {
 			}
 		}
 	}
-	else {
-		MarioAnimation.setAnimation(0, 0, 31, 31, ypos);
-		MarioAnimation.setYPos(ypos);
+}
+void MarioDeathUpdate(float dt) {
+	if (isactive) {
 		mariodeath.setPosition(mario.getPosition());
-		MarioAnimation.update(mariodeath);
+		Yvelocity = -10.0f;
+		isactive = false;
+		processdeath = true;
+	}
+	if (processdeath) {
+		Yvelocity += (Yvelocity < 10.0f ? 0.3f * dt : 0.0f);
+		if (Yvelocity > 10.0f) Yvelocity = 10.0f;
+		mariodeath.move({ 0.0f, Yvelocity * dt });
 	}
 }

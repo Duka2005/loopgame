@@ -25,6 +25,12 @@ int main()
 			if (event->is<sf::Event::Closed>())
 				window.close();
 		}
+		if (mario.getPosition().y > 480 + 34 && !processdeath) {
+			CanMarioControl = false;
+			isactive = true;
+			//	window.close();
+		}
+
 		//Check when to generate map
 		timestep.addFrame();
 		while (timestep.isUpdateRequired()) {
@@ -34,16 +40,12 @@ int main()
 			MarioVerticleUpdate(dt);
 			MoveFromOffset();
 			setView(dt);
+			MarioDeathUpdate(dt);
 		}
 		CheckLevelAvaliable();
 		LevelUpdatePos();
 		updateView();
 		BgColorInitPos();
-
-		if (mario.getPosition().y > 480 + 32) {
-			CanMarioControl = false;
-			window.close();
-		}
 
 		updateAnimation();
 

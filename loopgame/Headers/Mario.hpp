@@ -7,7 +7,7 @@ extern sf::Sprite mario;
 extern sf::Texture mariodeathtexture;
 extern sf::Sprite mariodeath;
 
-extern bool CanMarioControl, FirstMarioDirection, MarioDirection, MarioCurrentFalling;
+extern bool CanMarioControl, FirstMarioDirection, MarioDirection, MarioCurrentFalling, isactive, processdeath;
 extern float Xvelocity, Yvelocity;
 
 extern sf::FloatRect mariofoot;
@@ -23,6 +23,7 @@ extern bool isCollide(const sf::FloatRect& hitbox, const sf::Sprite& sprite, con
 extern void MarioVerticleUpdate(float dt);
 extern void MarioHorizonUpdate(float dt);
 extern void updateAnimation();
+extern void MarioDeathUpdate(float dt);
 extern void MarioInit();
 extern void MoveFromOffset();
 
