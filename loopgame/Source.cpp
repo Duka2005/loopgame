@@ -1,10 +1,12 @@
 #include <SFML/Graphics.hpp>
+#include <SFML/System/Clock.hpp>
 #include "Headers/Mario.hpp"
 #include "Headers/Tileset.hpp"
 #include "Headers/Window.hpp"
 #include "Headers/Kairos.hpp"
 #include "Headers/GenLevel.hpp"
 #include "Headers/BackgroundColor.hpp"
+#include "Headers/Sound.hpp"
 
 #include <ctre.hpp>
 
@@ -28,13 +30,17 @@ int main()
 		if (mario.getPosition().y > 480 + 34 && !processdeath) {
 			CanMarioControl = false;
 			isactive = true;
-			//	window.close();
+			death.play();
+			MarioDeathClock.start();
 		}
-
+		if (MarioDeathClock.getElapsedTime().asSeconds() >= 4) {
+			death.stop();
+			window.close();
+		}
 		//Check when to generate map
 		timestep.addFrame();
 		while (timestep.isUpdateRequired()) {
-			float dt = timestep.getStepAsFloat() * 50.0f;
+			const float dt = timestep.getStepAsFloat() * 50.0f;
 			MarioMovement(dt);
 			MarioHorizonUpdate(dt);
 			MarioVerticleUpdate(dt);

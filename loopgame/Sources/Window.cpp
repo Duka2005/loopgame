@@ -55,6 +55,9 @@ void updateView() {
 	viewwin.setCenter(sf::Vector2f({ 640 / 2, 480 / 2 }));
 }
 void setView(float dt) {
+	if (processdeath) {
+		speedtime -= (speedtime > 0.0f ? 0.1f * dt : 0.0f);
+		if (speedtime <= 0.0f) speedtime = 0.0f;
+	}
 	initx += dt * speedtime;
-	//std::cout << initx << "\n";
 }

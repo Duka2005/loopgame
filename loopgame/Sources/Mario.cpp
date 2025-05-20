@@ -7,6 +7,8 @@
 
 #include <iostream>
 
+sf::Clock MarioDeathClock;
+
 sf::Texture mariotexture("Resources/Image/SmallMario.png");
 sf::Sprite mario(mariotexture);
 
@@ -207,6 +209,7 @@ void MoveFromOffset() {
 void MarioInit() {
 	mario.setOrigin({ 11, 28 });
 	mariodeath.setOrigin({ 11, 28 });
+	MarioDeathClock.reset();
 }
 
 // animation cua nhan vat
@@ -253,8 +256,10 @@ void MarioDeathUpdate(float dt) {
 		processdeath = true;
 	}
 	if (processdeath) {
-		Yvelocity += (Yvelocity < 10.0f ? 0.3f * dt : 0.0f);
-		if (Yvelocity > 10.0f) Yvelocity = 10.0f;
-		mariodeath.move({ 0.0f, Yvelocity * dt });
+		if (MarioDeathClock.getElapsedTime().asSeconds() >= 0.5f) {
+			Yvelocity += (Yvelocity < 10.0f ? 0.3f * dt : 0.0f);
+			if (Yvelocity > 10.0f) Yvelocity = 10.0f;
+			mariodeath.move({ 0.0f, Yvelocity * dt });
+		}
 	}
 }

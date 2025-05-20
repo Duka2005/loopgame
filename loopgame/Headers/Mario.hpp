@@ -2,6 +2,8 @@
 #ifndef MARIO_HPP
 #define MARIO_HPP
 
+extern sf::Clock MarioDeathClock;
+
 extern sf::Texture mariotexture;
 extern sf::Sprite mario;
 extern sf::Texture mariodeathtexture;
