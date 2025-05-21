@@ -16,6 +16,9 @@ int main()
 	timestep.setStep(1.0f / 500.0f);
 	timestep.setMaxAccumulation(1.0f / 40.0f);
 
+	music.play();
+	music.setLooping(true);
+
 	BgColorInitColor();
 	MarioInit();
 	ViewInit();
@@ -28,6 +31,7 @@ int main()
 				window.close();
 		}
 		if (mario.getPosition().y > 480 + 34 && !processdeath) {
+			music.stop();
 			CanMarioControl = false;
 			isactive = true;
 			death.play();

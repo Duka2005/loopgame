@@ -51,7 +51,7 @@ void ViewInit() {
 }
 void updateView() {
 	viewwin = getLetterboxView(view, window.getSize().x, window.getSize().y);
-	view.setCenter({ initx, 240.0f});
+	view.setCenter({ std::round(initx), 240.0f});
 	viewwin.setCenter(sf::Vector2f({ 640 / 2, 480 / 2 }));
 }
 void setView(float dt) {

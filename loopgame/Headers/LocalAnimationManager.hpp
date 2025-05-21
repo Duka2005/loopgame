@@ -24,7 +24,7 @@ public:
 	void setFrequency(int frequency);
 	void update(sf::Sprite& sprite);
 	void silentupdate();
-	bool isAtTheEnd();
+	bool isAtTheEnd() const;
 	void setTexture(sf::Sprite& sprite, sf::Texture* texture);
 	void setYPos(int y);
 };

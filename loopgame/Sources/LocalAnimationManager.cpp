@@ -78,7 +78,7 @@ void LocalAnimationManager::silentupdate() {
 		this->TimeRun.restart();
 	}
 }
-bool LocalAnimationManager::isAtTheEnd() {
+bool LocalAnimationManager::isAtTheEnd() const {
 	int temp = this->endingIndexAnimation;
 	temp = std::max(0, temp - 1);
 	return (this->indexAnimation == temp);

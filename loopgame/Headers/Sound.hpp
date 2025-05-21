@@ -9,4 +9,6 @@ extern sf::Sound jump;
 extern sf::SoundBuffer deathbuffer;
 extern sf::Sound death;
 
+extern sf::Music music;
+
 #endif
