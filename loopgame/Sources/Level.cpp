@@ -6,20 +6,6 @@
 #include "../Headers/Window.hpp"
 #include "../Headers/Mario.hpp"
 
-const std::array<std::string, 12> PathLvl{
-	"Levels/level_0.txt",
-	"Levels/level_1.txt",
-	"Levels/level_2.txt",
-	"Levels/level_3.txt",
-	"Levels/level_4.txt",
-	"Levels/level_5.txt",
-	"Levels/level_6.txt",
-	"Levels/level_7.txt",
-	"Levels/level_8.txt",
-	"Levels/level_9.txt",
-	"Levels/level_10.txt",
-	"Levels/level_11.txt"
-};
 std::random_device rd;
 std::vector<Level> lvldata;
 std::uniform_int_distribution<int> dist(1, 11);
@@ -46,14 +32,19 @@ int RandomUntilUnique() {
 	return ran;
 }
 
+std::string getRandomLevel() {
+	std::string out = "Levels/level_"+std::to_string(RandomUntilUnique())+".txt";
+	return out;
+}
+
 //level map starter when game is start
 void LevelInit() {
 	lvldata.push_back(Level());
-	GenLevel(lvldata.back(), PathLvl[0], 0);
+	GenLevel(lvldata.back(), "Levels/level_0.txt", 0);
 	lvldata.push_back(Level());
-	GenLevel(lvldata.back(), PathLvl[RandomUntilUnique()], 1);
+	GenLevel(lvldata.back(), getRandomLevel(), 1);
 	lvldata.push_back(Level());
-	GenLevel(lvldata.back(), PathLvl[RandomUntilUnique()], 2);
+	GenLevel(lvldata.back(), getRandomLevel(), 2);
 }
 
 //generate new level map in bottom
@@ -63,7 +54,7 @@ void CheckLevelAvaliable() {
 		for (int i = 0; i < lvldata.size(); ++i)
 			lvldata[i].pos = i;
 		lvldata.push_back(Level());
-		GenLevel(lvldata.back(), PathLvl[RandomUntilUnique()], 2);
+		GenLevel(lvldata.back(), getRandomLevel(), 2);
 		initx -= 1280.0f;
 		mario.setPosition({mario.getPosition().x - 1280.0f, mario.getPosition().y});
 	}
