@@ -10,7 +10,7 @@ sf::RenderTexture rTexture({ 640, 480 });
 sf::View viewwin;
 sf::View view;
 
-float speedtime = 2.0f;
+float speedtime = 3.5f;
 float initx = 320.0f;
 
 sf::View getLetterboxView(sf::View view, int windowWidth, int windowHeight) {

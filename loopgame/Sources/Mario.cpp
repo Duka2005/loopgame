@@ -38,6 +38,7 @@ sf::FloatRect mariofoot({ 1 + 4 ,29 }, { 22,2 });
 sf::FloatRect marioleft({ -1 + 4,1 }, { 2,27 });
 sf::FloatRect marioright({ 22 + 4,1 }, { 2,27 });
 sf::FloatRect mariohead({ 1 + 4,-1 }, { 22,2 });
+sf::FloatRect mariomain({ 0 + 4,0 }, { 23,29 });
 
 void SetMarioPosition(float x, float y) {
 	mario.setPosition({ x, y });
@@ -262,4 +263,12 @@ void MarioDeathUpdate(float dt) {
 			mariodeath.move({ 0.0f, Yvelocity * dt });
 		}
 	}
+}
+
+void MarioDeath() {
+	music.stop();
+	CanMarioControl = false;
+	isactive = true;
+	death.play();
+	MarioDeathClock.start();
 }

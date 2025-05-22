@@ -15,6 +15,8 @@ extern float Xvelocity, Yvelocity;
 extern sf::FloatRect mariofoot;
 extern sf::FloatRect marioleft;
 extern sf::FloatRect marioright;
+extern sf::FloatRect mariohead;
+extern sf::FloatRect mariomain;
 
 extern void MarioMovement(float dt);
 extern void SetMarioPosition(float x, float y);
@@ -28,5 +30,6 @@ extern void updateAnimation();
 extern void MarioDeathUpdate(float dt);
 extern void MarioInit();
 extern void MoveFromOffset();
+extern void MarioDeath();
 
 #endif

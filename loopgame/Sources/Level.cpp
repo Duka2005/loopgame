@@ -31,6 +31,11 @@ void Level::UpdateTilePosition() {
 		data[i].setPosition(sf::Vector2f({ this->origin_pos[i].x + this->pos * 1280.0f , this->origin_pos[i].y}));
 }
 
+void Level::UpdatePiranhaGroundPosition() {
+	for (int i = 0; i < piranha_ground_data.size(); ++i)
+		piranha_ground_data[i].setPosition(sf::Vector2f({ this->piranha_ground_origin_pos[i].x + this->pos * 1280.0f , this->piranha_ground_origin_pos[i].y }));
+}
+
 //make a random number
 int RandomUntilUnique() {
 	int ran = dist(rd);
@@ -66,6 +71,7 @@ void CheckLevelAvaliable() {
 void LevelUpdatePos() {
 	for (int i = 0; i < lvldata.size(); ++i) {
 		lvldata[i].UpdateTilePosition();
+		lvldata[i].UpdatePiranhaGroundPosition();
 	}
 }
 

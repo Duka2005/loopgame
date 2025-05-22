@@ -4,6 +4,7 @@
 #include <vector>
 #include "../Headers/Tileset.hpp"
 #include "../Headers/Level.hpp"
+#include "../Headers/Enemy.hpp"
 
 #include <ctre.hpp>
 
@@ -18,6 +19,12 @@ std::vector<float> tile_x;
 std::vector<float> tile_y;
 std::vector<float> block_x;
 std::vector<float> block_y;
+
+std::vector<std::string> enemy_name;
+std::vector<float> enemypos_x;
+std::vector<float> enemypos_y;
+
+
 
 //generate level map function
 void GenLevel(Level& lvl, std::string level, int position) {
@@ -92,14 +99,35 @@ void GenLevel(Level& lvl, std::string level, int position) {
         for (auto& match : ctre::search_all<"block_(\\d+)_y=(\\d+)">(line)) {
             block_y.push_back(match.get<2>().to_number());
         }
+
+        for (auto& match : ctre::search_all<"npc_(\\d+)=(.*)">(line)) {
+            enemy_name.push_back(match.get<2>().to_string());
+        }
+        for (auto& match : ctre::search_all<"npc_(\\d+)_x=(.*)">(line)) {
+            enemypos_x.push_back(match.get<2>().to_number());
+        }
+        for (auto& match : ctre::search_all<"npc_(\\d+)_y=(.*)">(line)) {
+            enemypos_y.push_back(match.get<2>().to_number());
+        }
     }
     for (int i = 0; i < block_x.size(); ++i)
     {
         addObstacleBlock(lvl, block_x[i], block_y[i], tile_x[i], tile_y[i]);
     }
+
+    for (int i = 0; i < enemypos_x.size(); ++i)
+    {
+        if (enemy_name[i] == "Common 022") {
+            AddPiranhaGround(lvl ,enemypos_x[i], enemypos_y[i]);
+        }
+    }
+
     block_x.clear();
     block_y.clear();
     tile_x.clear();
     tile_y.clear();
+    enemy_name.clear();
+    enemypos_x.clear();
+    enemypos_y.clear();
     inputFile.close();
 }

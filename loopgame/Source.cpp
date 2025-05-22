@@ -7,6 +7,7 @@
 #include "Headers/GenLevel.hpp"
 #include "Headers/BackgroundColor.hpp"
 #include "Headers/Sound.hpp"
+#include "Headers/Enemy.hpp"
 
 #include <ctre.hpp>
 
@@ -25,17 +26,15 @@ int main()
 	LevelInit();
 	SetMarioPosition(320, 416);
 
+	PiranhaGroundAnimationInit();
+
 	while (window.isOpen()) {
 		while (const std::optional event = window.pollEvent()) {
 			if (event->is<sf::Event::Closed>())
 				window.close();
 		}
 		if (mario.getPosition().y > 480 + 34 && !processdeath) {
-			music.stop();
-			CanMarioControl = false;
-			isactive = true;
-			death.play();
-			MarioDeathClock.start();
+			MarioDeath();
 		}
 		if (MarioDeathClock.getElapsedTime().asSeconds() >= 4) {
 			death.stop();
@@ -56,6 +55,7 @@ int main()
 		LevelUpdatePos();
 		updateView();
 		BgColorInitPos();
+		CheckPiranhaGroundCollision();
 
 		updateAnimation();
 
@@ -64,6 +64,7 @@ int main()
 		window.setView(viewwin);
 		rTexture.draw(Backgroundcolor);
 		LevelDraw();
+		DrawPiranhaGround();
 		if (CanMarioControl) rTexture.draw(mario);
 		else rTexture.draw(mariodeath);
 		rTexture.display();
