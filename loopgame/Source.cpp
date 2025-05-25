@@ -50,6 +50,8 @@ int main()
 			MarioVerticleUpdate(dt);
 			MoveFromOffset();
 			MarioDeathUpdate(dt);
+			GoombaVerticleUpdate(dt);
+			GoombaHorizonUpdate(dt);
 			GoombaMovement(dt);
 			setView(dt);
 		}
