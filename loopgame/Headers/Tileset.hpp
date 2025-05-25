@@ -4,8 +4,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <vector>
-
-#include "Level.hpp"
+#include "GameClass.hpp"
 
 extern std::vector<sf::Sprite> obstacles;
 

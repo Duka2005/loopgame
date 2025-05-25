@@ -1,11 +1,10 @@
 #include <SFML/Graphics.hpp>
-#include <iostream>
 #include <cstdint>
 
 #include "../Headers/Window.hpp"
 #include "../Headers/LocalAnimationManager.hpp"
 
-void LocalAnimationManager::setAnimation(int startingIndexAnimation, int endingIndexAnimation, int sizex, int sizey, int y, int frequency) {
+void LocalAnimationManager::setAnimation(const int startingIndexAnimation, const int endingIndexAnimation, const int sizex, const int sizey, const int y, const int frequency) {
 	this->startingIndexAnimation = startingIndexAnimation;
 	this->indexAnimation = startingIndexAnimation;
 	this->endingIndexAnimation = endingIndexAnimation;
@@ -17,10 +16,10 @@ void LocalAnimationManager::setAnimation(int startingIndexAnimation, int endingI
 	this->sizey = sizey;
 	this->y = y;
 }
-void LocalAnimationManager::setTexture(sf::Sprite& sprite, sf::Texture* texture) {
+void LocalAnimationManager::setTexture(sf::Sprite& sprite, const sf::Texture* texture) {
 	sprite.setTexture(*texture);
 }
-void LocalAnimationManager::SetRangeIndexAnimation(int startingIndexAnimation, int endingIndexAnimation, int frequency) {
+void LocalAnimationManager::SetRangeIndexAnimation(const int startingIndexAnimation, const int endingIndexAnimation, const int frequency) {
 	if (this->startingIndexAnimation != startingIndexAnimation || this->endingIndexAnimation != endingIndexAnimation) {
 		this->startingIndexAnimation = startingIndexAnimation;
 		this->endingIndexAnimation = endingIndexAnimation;
@@ -37,19 +36,19 @@ void LocalAnimationManager::SetRangeIndexAnimation(int startingIndexAnimation, i
 		this->TimeRemainSave = 0.0f;
 	}
 }
-void LocalAnimationManager::setIndexAnimation(int indexAnimation) {
+void LocalAnimationManager::setIndexAnimation(const int indexAnimation) {
 	this->indexAnimation = indexAnimation;
 }
-void LocalAnimationManager::setStartingIndexAnimation(int startingIndexAnimation) {
+void LocalAnimationManager::setStartingIndexAnimation(const int startingIndexAnimation) {
 	this->startingIndexAnimation = startingIndexAnimation;
 }
-void LocalAnimationManager::setEndingIndexAnimation(int endingIndexAnimation) {
+void LocalAnimationManager::setEndingIndexAnimation(const int endingIndexAnimation) {
 	this->endingIndexAnimation = endingIndexAnimation;
 }
-void LocalAnimationManager::setFrequency(int frequency) {
+void LocalAnimationManager::setFrequency(const int frequency) {
 	this->frequency = frequency;
 }
-void LocalAnimationManager::setYPos(int y) {
+void LocalAnimationManager::setYPos(const int y) {
 	this->y = y;
 }
 void LocalAnimationManager::update(sf::Sprite& sprite) {
@@ -57,7 +56,8 @@ void LocalAnimationManager::update(sf::Sprite& sprite) {
 	sprite.setTextureRect(sf::IntRect({ this->indexAnimation * this->sizex, y * this->sizey }, { this->sizex, this->sizey }));
 	this->TimeRan = this->TimeRemainSave + this->TimeRun.getElapsedTime().asMicroseconds() / 1000.0f;
 	if (this->frequency != 0 && this->TimeRan >= (2000.0f / this->frequency)) {
-		long long loop = (long long)(this->TimeRan / (2000.0f / this->frequency));
+		const long long loop = static_cast<long long>(
+			this->TimeRan / (2000.0f / this->frequency));
 		for (int i = 0; i < loop; i++) {
 			if (this->indexAnimation < this->endingIndexAnimation) this->indexAnimation++;
 			else this->indexAnimation = this->startingIndexAnimation;
@@ -66,10 +66,14 @@ void LocalAnimationManager::update(sf::Sprite& sprite) {
 		this->TimeRun.restart();
 	}
 }
+sf::IntRect LocalAnimationManager::getAnimationTextureRect() const {
+	return sf::IntRect({ this->indexAnimation * this->sizex, y * this->sizey }, { this->sizex, this->sizey });
+}
 void LocalAnimationManager::silentupdate() {
-	this->TimeRan = this->TimeRemainSave + this->TimeRun.getElapsedTime().asMilliseconds();
+	this->TimeRan = this->TimeRemainSave + this->TimeRun.getElapsedTime().asMicroseconds() / 1000.0f;
 	if (this->frequency != 0 && this->TimeRan >= (2000.0f / this->frequency)) {
-		long long loop = (long long)(this->TimeRan / (2000.0f / this->frequency));
+		const long long loop = static_cast<long long>(
+			this->TimeRan / (2000.0f / this->frequency));
 		for (int i = 0; i < loop; i++) {
 			if (this->indexAnimation < this->endingIndexAnimation) this->indexAnimation++;
 			else this->indexAnimation = this->startingIndexAnimation;

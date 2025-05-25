@@ -2,6 +2,7 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include "../Headers/GameClass.hpp"
 #include "../Headers/Tileset.hpp"
 #include "../Headers/Level.hpp"
 #include "../Headers/Enemy.hpp"
@@ -23,8 +24,6 @@ std::vector<float> block_y;
 std::vector<std::string> enemy_name;
 std::vector<float> enemypos_x;
 std::vector<float> enemypos_y;
-
-
 
 //generate level map function
 void GenLevel(Level& lvl, std::string level, int position) {
@@ -118,7 +117,10 @@ void GenLevel(Level& lvl, std::string level, int position) {
     for (int i = 0; i < enemypos_x.size(); ++i)
     {
         if (enemy_name[i] == "Common 022") {
-            AddPiranhaGround(lvl ,enemypos_x[i], enemypos_y[i]);
+            AddPiranhaGround(lvl, enemypos_x[i], enemypos_y[i]);
+        }
+        else if (enemy_name[i] == "Common 001") {
+            AddGoomba(lvl, enemypos_x[i], enemypos_y[i]);
         }
     }
 

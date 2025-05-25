@@ -24,8 +24,10 @@ public:
 	void setFrequency(int frequency);
 	void update(sf::Sprite& sprite);
 	void silentupdate();
+	sf::IntRect getAnimationTextureRect() const;
 	bool isAtTheEnd() const;
-	void setTexture(sf::Sprite& sprite, sf::Texture* texture);
+
+	static void setTexture(sf::Sprite& sprite, const sf::Texture* texture);
 	void setYPos(int y);
 };
 #endif // LOCALANIMATIONMANAGER_HPP

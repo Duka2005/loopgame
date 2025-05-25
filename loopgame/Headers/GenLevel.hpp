@@ -7,6 +7,7 @@
 #include <string>
 #include <regex>
 #include <vector>
+#include "GameClass.hpp"
 
 extern std::string line;
 extern std::regex block_regex;

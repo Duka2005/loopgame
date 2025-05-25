@@ -27,6 +27,7 @@ int main()
 	SetMarioPosition(320, 416);
 
 	PiranhaGroundAnimationInit();
+	GoombaAnimationInit();
 
 	while (window.isOpen()) {
 		while (const std::optional event = window.pollEvent()) {
@@ -48,14 +49,16 @@ int main()
 			MarioHorizonUpdate(dt);
 			MarioVerticleUpdate(dt);
 			MoveFromOffset();
-			setView(dt);
 			MarioDeathUpdate(dt);
+			GoombaMovement(dt);
+			setView(dt);
 		}
 		CheckLevelAvaliable();
 		LevelUpdatePos();
 		updateView();
 		BgColorInitPos();
 		CheckPiranhaGroundCollision();
+		CheckGoombaCollision();
 
 		updateAnimation();
 
@@ -64,7 +67,7 @@ int main()
 		window.setView(viewwin);
 		rTexture.draw(Backgroundcolor);
 		LevelDraw();
-		DrawPiranhaGround();
+		DrawEnemy();
 		if (CanMarioControl) rTexture.draw(mario);
 		else rTexture.draw(mariodeath);
 		rTexture.display();

@@ -21,7 +21,7 @@ extern sf::FloatRect mariomain;
 extern void MarioMovement(float dt);
 extern void SetMarioPosition(float x, float y);
 extern void setHitbox(sf::FloatRect& hitbox, const sf::FloatRect& Sethitbox);
-extern sf::FloatRect getGlobalHitbox(const sf::FloatRect& hitbox, const sf::Vector2f& pos);
+extern sf::FloatRect getGlobalHitbox(const sf::FloatRect& hitbox, const sf::Vector2f& pos, const sf::Vector2f& origin);
 extern sf::FloatRect getGlobalHitbox(const sf::FloatRect& hitbox, const sf::Sprite& sprite);
 extern bool isCollide(const sf::FloatRect& hitbox, const sf::Sprite& sprite, const sf::FloatRect& other);
 extern void MarioVerticleUpdate(float dt);

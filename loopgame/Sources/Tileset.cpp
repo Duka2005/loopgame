@@ -1,4 +1,5 @@
 #include <SFML/Graphics.hpp>
+#include "../Headers/GameClass.hpp"
 #include "../Headers/Tileset.hpp"
 #include "../Headers/Level.hpp"
 

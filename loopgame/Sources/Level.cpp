@@ -1,26 +1,17 @@
 #include <vector>
 #include <random>
+#include "../Headers/GenLevel.hpp"
 #include "../Headers/Level.hpp"
 #include "../Headers/Tileset.hpp"
-#include "../Headers/GenLevel.hpp"
 #include "../Headers/Window.hpp"
 #include "../Headers/Mario.hpp"
+#include "../Headers/GameClass.hpp"
 
 std::random_device rd;
 std::vector<Level> lvldata;
 std::uniform_int_distribution<int> dist(1, 11);
 int global_pos = 2;
 int global_prev = 0;
-
-void Level::UpdateTilePosition() {
-	for (int i = 0; i < data.size(); ++i)
-		data[i].setPosition(sf::Vector2f({ this->origin_pos[i].x + this->pos * 1280.0f , this->origin_pos[i].y}));
-}
-
-void Level::UpdatePiranhaGroundPosition() {
-	for (int i = 0; i < piranha_ground_data.size(); ++i)
-		piranha_ground_data[i].setPosition(sf::Vector2f({ this->piranha_ground_origin_pos[i].x + this->pos * 1280.0f , this->piranha_ground_origin_pos[i].y }));
-}
 
 //make a random number
 int RandomUntilUnique() {
@@ -62,7 +53,7 @@ void CheckLevelAvaliable() {
 void LevelUpdatePos() {
 	for (int i = 0; i < lvldata.size(); ++i) {
 		lvldata[i].UpdateTilePosition();
-		lvldata[i].UpdatePiranhaGroundPosition();
+		lvldata[i].UpdateEnemyPosition();
 	}
 }
 

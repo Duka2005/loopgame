@@ -4,6 +4,7 @@
 #include "../Headers/Window.hpp"
 #include "../Headers/Sound.hpp"
 #include "../Headers/LocalAnimationManager.hpp"
+#include "../Headers/Level.hpp"
 
 #include <iostream>
 
@@ -47,14 +48,17 @@ void SetMarioPosition(float x, float y) {
 void setHitbox(sf::FloatRect& hitbox, const sf::FloatRect& Sethitbox) {
 	hitbox = Sethitbox;
 }
-sf::FloatRect getGlobalHitbox(const sf::FloatRect& hitbox, const sf::Vector2f& pos) {
-	return sf::FloatRect({ pos.x + hitbox.position.x, pos.y + hitbox.position.y }, { hitbox.size.x, hitbox.size.y });
+sf::FloatRect getGlobalHitbox(const sf::FloatRect& hitbox, const sf::Vector2f& pos, const sf::Vector2f& origin) {
+	return sf::FloatRect({ pos.x + hitbox.position.x - origin.x, pos.y + hitbox.position.y - origin.y }, { hitbox.size.x, hitbox.size.y });
 }
 sf::FloatRect getGlobalHitbox(const sf::FloatRect& hitbox, const sf::Sprite& sprite) {
 	return sprite.getTransform().transformRect(hitbox);
 }
 bool isCollide(const sf::FloatRect& hitbox, const sf::Sprite& sprite, const sf::FloatRect& other) {
 	return bool(getGlobalHitbox(hitbox, sprite).findIntersection(other));
+}
+bool isCollide(const sf::FloatRect& hitbox, const sf::FloatRect& other) {
+	return static_cast<bool>(hitbox.findIntersection(other));
 }
 
 sf::Vector2f CheckMarioCollision(sf::Sprite& mario, const sf::FloatRect& other) {

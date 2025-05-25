@@ -138,6 +138,7 @@
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="Sources\BackgroundColor.cpp" />
     <ClCompile Include="Sources\Enemy.cpp" />
+    <ClCompile Include="Sources\GameClass.cpp" />
     <ClCompile Include="Sources\GenLevel.cpp" />
     <ClCompile Include="Sources\Level.cpp" />
     <ClCompile Include="Sources\LocalAnimationManager.cpp" />
@@ -149,6 +150,7 @@
   <ItemGroup>
     <ClInclude Include="Headers\BackgroundColor.hpp" />
     <ClInclude Include="Headers\Enemy.hpp" />
+    <ClInclude Include="Headers\GameClass.hpp" />
     <ClInclude Include="Headers\GenLevel.hpp" />
     <ClInclude Include="Headers\Level.hpp" />
     <ClInclude Include="Headers\LocalAnimationManager.hpp" />
