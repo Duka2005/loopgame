@@ -28,6 +28,7 @@ int main()
 
 	PiranhaGroundAnimationInit();
 	GoombaAnimationInit();
+	SpinyAnimationInit();
 
 	while (window.isOpen()) {
 		while (const std::optional event = window.pollEvent()) {
@@ -53,6 +54,9 @@ int main()
 			GoombaVerticleUpdate(dt);
 			GoombaHorizonUpdate(dt);
 			GoombaMovement(dt);
+			SpinyVerticleUpdate(dt);
+			SpinyHorizonUpdate(dt);
+			SpinyMovement(dt);
 			setView(dt);
 		}
 		CheckLevelAvaliable();
@@ -61,6 +65,7 @@ int main()
 		BgColorInitPos();
 		CheckPiranhaGroundCollision();
 		CheckGoombaCollision();
+		CheckSpinyCollision();
 
 		updateAnimation();
 

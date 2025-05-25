@@ -42,6 +42,44 @@ private:
 	sf::Texture     m_texture;
 };
 
+class SpinyEnemy : public sf::Drawable, public sf::Transformable {
+public:
+	SpinyEnemy(sf::Texture texture) {
+		this->m_vertices.setPrimitiveType(sf::PrimitiveType::TriangleStrip);
+		this->m_vertices.resize(4);
+		this->m_texture = texture;
+		this->m_vertices[0].position = sf::Vector2f({ 0,0 });
+		this->m_vertices[1].position = sf::Vector2f({ static_cast<float>(texture.getSize().x) ,0 });
+		this->m_vertices[2].position = sf::Vector2f({ 0 , static_cast<float>(texture.getSize().y) });
+		this->m_vertices[3].position = sf::Vector2f({ static_cast<float>(texture.getSize().x) , static_cast<float>(texture.getSize().y) });
+
+		this->m_vertices[0].texCoords = sf::Vector2f({ 0,0 });
+		this->m_vertices[1].texCoords = sf::Vector2f({ static_cast<float>(texture.getSize().x) ,0 });
+		this->m_vertices[2].texCoords = sf::Vector2f({ 0 , static_cast<float>(texture.getSize().y) });
+		this->m_vertices[3].texCoords = sf::Vector2f({ static_cast<float>(texture.getSize().x) , static_cast<float>(texture.getSize().y) });
+	}
+	void setTextureRect(const sf::IntRect& rect, const bool resetSize);
+	void setSpinyXvelocity(float x);
+	void setSpinyYvelocity(float y);
+	void setSpinyDirection(bool x);
+	void setSpinySpeed(float speed);
+	float getSpinyXvelocity();
+	float getSpinyYvelocity();
+	bool getSpinyDirection();
+	float getSpinySpeed();
+	void SetSpinyTexture(sf::Texture GoombaTexture);
+private:
+	float m_SpinyXvelocity = 0.0f;
+	float m_SpinyYvelocity = 0.0f;
+	float m_SpinySpeed = 1.0f;
+	bool m_FirstSpinyDirection = true;
+	bool m_SpinyDirection = true;
+
+	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+	sf::VertexArray m_vertices;
+	sf::Texture     m_texture;
+};
+
 class Level {
 public:
 	std::vector<sf::Sprite> data{};
@@ -50,6 +88,8 @@ public:
 	std::vector<sf::Vector2f> piranha_ground_origin_pos{};
 	std::vector<GoombaEnemy> goomba_data{};
 	std::vector<sf::Vector2f> goomba_origin_pos{};
+	std::vector<SpinyEnemy> spiny_data{};
+	std::vector<sf::Vector2f> spiny_origin_pos{};
 	int pos = 0;
 
 	void UpdateTilePosition();

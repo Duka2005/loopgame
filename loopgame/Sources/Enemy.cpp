@@ -9,13 +9,19 @@
 #include <iostream>
 sf::Texture PiranhaGroundTexture("Resources/Image/Enemy/PiranhaGround.png");
 sf::Texture GoombaTexture("Resources/Image/Enemy/Goomba.png");
+sf::Texture SpinyTexture("Resources/Image/Enemy/RedSpiny.png");
 
 LocalAnimationManager PiranhaGroundAnimation;
 LocalAnimationManager GoombaAnimation;
+LocalAnimationManager SpinyAnimation;
 
 sf::FloatRect goombafoot({ 1 ,32 }, { 30,2 });
 sf::FloatRect goombaleft({ -1,1 }, { 2,30 });
 sf::FloatRect goombaright({ 30,1 }, { 2,30 });
+
+sf::FloatRect spinyfoot({ 1 ,32 }, { 30,2 });
+sf::FloatRect spinyleft({ -1,1 }, { 2,30 });
+sf::FloatRect spinyright({ 30,1 }, { 2,30 });
 
 //Piranha Ground
 void AddPiranhaGround(Level& lvl, float x, float y) {
@@ -146,6 +152,114 @@ void GoombaHorizonUpdate(float dt) {
 	}
 }
 
+//Spiny
+float SpinyXvelocity = 0.0f;
+float SpinyYvelocity = 0.0f;
+float SpinySpeed;
+bool FirstSpinyDirection = true;
+bool SpinyDirection = FirstSpinyDirection;
+
+void AddSpiny(Level& lvl, float x, float y) {
+	lvl.spiny_data.push_back(SpinyEnemy(SpinyTexture));
+	lvl.spiny_origin_pos.push_back(sf::Vector2f({ x,y }));
+}
+
+void SpinyAnimationInit() {
+	SpinyAnimation.setAnimation(0, 1, 33, 32, 0, 14);
+}
+
+void CheckSpinyCollision() {
+	sf::FloatRect SpinyHitBox({ 0, 0 }, { 33, 32 });
+	if (processdeath) return;
+	for (const auto& i : lvldata) {
+		for (const auto& j : i.spiny_data) {
+			if (isCollide(mariomain, mario, getGlobalHitbox(SpinyHitBox, j.getPosition(), j.getOrigin()))) {
+				MarioDeath();
+				break;
+			}
+		}
+	}
+}
+
+void SpinyMovement(float dt) {
+	for (auto& i : lvldata) {
+		for (unsigned int j = 0; j < i.spiny_data.size(); ++j) {
+			if (i.spiny_data[j].getSpinyXvelocity() < 1.0f && i.spiny_data[j].getSpinyDirection()) i.spiny_data[j].setSpinyXvelocity(1.0f);
+
+			if (i.spiny_data[j].getSpinyDirection()) i.spiny_origin_pos[j] = { i.spiny_origin_pos[j].x - i.spiny_data[j].getSpinyXvelocity() * dt, i.spiny_origin_pos[j].y };
+			if (!i.spiny_data[j].getSpinyDirection()) i.spiny_origin_pos[j] = { i.spiny_origin_pos[j].x + i.spiny_data[j].getSpinyXvelocity() * dt, i.spiny_origin_pos[j].y };
+		}
+
+	}
+}
+
+void SpinyVerticleUpdate(float dt) {
+	sf::FloatRect block({ 0, 0 }, { 32, 32 });
+	sf::Vector2f pos({ -1, -1 });
+	for (auto& i : lvldata) {
+		for (unsigned int j = 0; j < i.spiny_data.size(); ++j) {
+			i.spiny_data[j].setSpinyYvelocity(i.spiny_data[j].getSpinyYvelocity() + (i.spiny_data[j].getSpinyYvelocity() < 10.0f ? 1.0f * dt * 0.3f : 0.0f));
+			if (i.spiny_data[j].getSpinyYvelocity() > 10.0f) i.spiny_data[j].setSpinyYvelocity(10.0f);
+			i.spiny_origin_pos[j] = { i.spiny_origin_pos[j].x, i.spiny_origin_pos[j].y + i.spiny_data[j].getSpinyYvelocity() * dt };
+
+			const sf::FloatRect spinyGlobal = getGlobalHitbox(spinyfoot, sf::Vector2f({ i.spiny_origin_pos[j].x + i.pos * 1280.0f , i.spiny_origin_pos[j].y }), i.spiny_data[j].getOrigin());
+			pos = { -1,-1 };
+			for (unsigned int k = 0; k < i.data.size(); ++k) {
+				const sf::FloatRect blockGlobal = getGlobalHitbox(block, i.data[k]);
+				if (isCollide(spinyGlobal, blockGlobal)) {
+					pos = { i.data[k].getPosition().x, i.data[k].getPosition().y };
+					break;
+				}
+			}
+
+			if (pos.y != -1) {
+				i.spiny_origin_pos[j] = { i.spiny_origin_pos[j].x, pos.y - 31.0f };
+				i.spiny_data[j].setSpinyYvelocity(0.0f);
+			}
+		}
+	}
+}
+
+void SpinyHorizonUpdate(float dt) {
+	sf::FloatRect block({ 0, 0 }, { 32, 32 });
+	sf::Vector2f pos({ -1, -1 });
+	for (auto& i : lvldata) {
+		for (unsigned int j = 0; j < i.spiny_data.size(); ++j) {
+			pos = { -1,-1 };
+			if (!i.spiny_data[j].getSpinyDirection()) {
+				const sf::FloatRect spinyGlobal = getGlobalHitbox(spinyright, sf::Vector2f({ i.spiny_origin_pos[j].x + i.pos * 1280.0f , i.spiny_origin_pos[j].y }), i.spiny_data[j].getOrigin());
+				for (unsigned int k = 0; k < i.data.size(); ++k) {
+					const sf::FloatRect blockGlobal = getGlobalHitbox(block, i.data[k]);
+					if (isCollide(spinyGlobal, blockGlobal)) {
+						pos = { i.data[k].getPosition().x, i.data[k].getPosition().y };
+						break;
+					}
+				}
+				if (pos.x != -1) {
+					i.spiny_origin_pos[j] = { pos.x - 31.0f - i.pos * 1280.0f , i.spiny_origin_pos[j].y };
+					i.spiny_data[j].setSpinyDirection(true);
+					SpinyAnimation.setAnimation(0, 1, 33, 32, i.spiny_data[j].getSpinyDirection(), 14);
+				}
+			}
+			else if (i.spiny_data[j].getSpinyDirection()) {
+				const sf::FloatRect spinyGlobal = getGlobalHitbox(spinyleft, sf::Vector2f({ i.spiny_origin_pos[j].x + i.pos * 1280.0f , i.spiny_origin_pos[j].y }), i.spiny_data[j].getOrigin());
+				for (unsigned int k = 0; k < i.data.size(); ++k) {
+					const sf::FloatRect blockGlobal = getGlobalHitbox(block, i.data[k]);
+					if (isCollide(spinyGlobal, blockGlobal)) {
+						pos = { i.data[k].getPosition().x, i.data[k].getPosition().y };
+						break;
+					}
+				}
+				if (pos.x != -1) {
+					i.spiny_origin_pos[j] = { pos.x + 33.0f - i.pos * 1280.0f , i.spiny_origin_pos[j].y };
+					i.spiny_data[j].setSpinyDirection(false);
+					SpinyAnimation.setAnimation(0, 1, 33, 32, i.spiny_data[j].getSpinyDirection(), 14);
+				}
+			}
+		}
+	}
+}
+
 //Draw Enemy
 void DrawEnemy() {
 	for (auto& i : lvldata) {
@@ -156,6 +270,11 @@ void DrawEnemy() {
 		for (auto& j : i.goomba_data) {
 			GoombaAnimation.silentupdate();
 			j.setTextureRect(GoombaAnimation.getAnimationTextureRect(), true);
+			rTexture.draw(j);
+		}
+		for (auto& j : i.spiny_data) {
+			SpinyAnimation.silentupdate();
+			j.setTextureRect(SpinyAnimation.getAnimationTextureRect(), true);
 			rTexture.draw(j);
 		}
 	}
