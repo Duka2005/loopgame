@@ -5,6 +5,8 @@
 #include "../Headers/Mario.hpp"
 #include "../Headers/Level.hpp"
 #include "../Headers/Window.hpp"
+#include "../Headers/Sound.hpp"
+#include "../Headers/EnemyDeath.hpp"
 #include <vector>
 #include <iostream>
 sf::Texture PiranhaGroundTexture("Resources/Image/Enemy/PiranhaGround.png");
@@ -16,12 +18,12 @@ LocalAnimationManager GoombaAnimation;
 LocalAnimationManager SpinyAnimation;
 
 sf::FloatRect goombafoot({ 1 ,32 }, { 30,2 });
-sf::FloatRect goombaleft({ -1,1 }, { 2,30 });
-sf::FloatRect goombaright({ 30,1 }, { 2,30 });
+sf::FloatRect goombaleft({ -1,4 }, { 2,27 });
+sf::FloatRect goombaright({ 30,4 }, { 2,27 });
 
 sf::FloatRect spinyfoot({ 1 ,32 }, { 30,2 });
-sf::FloatRect spinyleft({ -1,1 }, { 2,30 });
-sf::FloatRect spinyright({ 30,1 }, { 2,30 });
+sf::FloatRect spinyleft({ -1,4 }, { 2,27 });
+sf::FloatRect spinyright({ 30,4 }, { 2,27 });
 
 //Piranha Ground
 void AddPiranhaGround(Level& lvl, float x, float y) {
@@ -65,13 +67,38 @@ void GoombaAnimationInit() {
 void CheckGoombaCollision() {
 	sf::FloatRect GoombaHitBox({ 0, 0 }, { 31, 32 });
 	if (processdeath) return;
-	for (const auto& i : lvldata) {
-		for (const auto& j : i.goomba_data) {
-			if (isCollide(mariomain, mario, getGlobalHitbox(GoombaHitBox, j.getPosition(), j.getOrigin()))) {
-				MarioDeath();
+	for (auto& i : lvldata) {
+		for (unsigned j = 0; j < i.goomba_data.size(); ++j) {
+			if (isCollide(mariomain, mario, getGlobalHitbox(GoombaHitBox, i.goomba_data[j].getPosition(), i.goomba_data[j].getOrigin()))) {
+				if (((i.goomba_data[j].getPosition().y - 16.0f) <= mario.getPosition().y) && (Yvelocity > 0.0f)) {
+					if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Z)) Yvelocity = -9.0f;
+					else Yvelocity = -14.0f;
+					goombadeath.play();
+					AddGoombaDeath(i.goomba_origin_pos[j].x + 1280 * i.pos, i.goomba_origin_pos[j].y);
+					DeleteGoomba(i.goomba_origin_pos[j].x, i.goomba_origin_pos[j].y);
+					break;
+				}
+				else{
+					MarioDeath();
+					break;
+				}
+			}
+		}
+	}
+}
+
+void DeleteGoomba(const float x, const float y) {
+	bool flag = false;
+	for (auto& i : lvldata) {
+		for (unsigned j = 0; j < i.goomba_data.size(); ++j) {
+			if (i.goomba_origin_pos[j].x == x && i.goomba_origin_pos[j].y == y) {
+				i.goomba_data.erase(i.goomba_data.begin() + j);
+				i.goomba_origin_pos.erase(i.goomba_origin_pos.begin() + j);
+				flag = true;
 				break;
 			}
 		}
+		if (flag) break;
 	}
 }
 
@@ -151,7 +178,6 @@ void GoombaHorizonUpdate(float dt) {
 		}
 	}
 }
-
 //Spiny
 float SpinyXvelocity = 0.0f;
 float SpinyYvelocity = 0.0f;
@@ -238,7 +264,7 @@ void SpinyHorizonUpdate(float dt) {
 				if (pos.x != -1) {
 					i.spiny_origin_pos[j] = { pos.x - 31.0f - i.pos * 1280.0f , i.spiny_origin_pos[j].y };
 					i.spiny_data[j].setSpinyDirection(true);
-					SpinyAnimation.setAnimation(0, 1, 33, 32, i.spiny_data[j].getSpinyDirection(), 14);
+					SpinyAnimation.setAnimation(0, 1, 33, 32, 1, 14);
 				}
 			}
 			else if (i.spiny_data[j].getSpinyDirection()) {
@@ -253,7 +279,7 @@ void SpinyHorizonUpdate(float dt) {
 				if (pos.x != -1) {
 					i.spiny_origin_pos[j] = { pos.x + 33.0f - i.pos * 1280.0f , i.spiny_origin_pos[j].y };
 					i.spiny_data[j].setSpinyDirection(false);
-					SpinyAnimation.setAnimation(0, 1, 33, 32, i.spiny_data[j].getSpinyDirection(), 14);
+					SpinyAnimation.setAnimation(0, 1, 33, 32, 0, 14);
 				}
 			}
 		}

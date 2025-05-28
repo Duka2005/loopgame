@@ -6,6 +6,7 @@
 #include "../Headers/Window.hpp"
 #include "../Headers/Mario.hpp"
 #include "../Headers/GameClass.hpp"
+#include "../Headers/EnemyDeath.hpp"
 
 std::random_device rd;
 std::vector<Level> lvldata;
@@ -48,6 +49,10 @@ void CheckLevelAvaliable() {
 		GenLevel(lvldata.back(), getRandomLevel(), 2);
 		initx -= 1280.0f;
 		mario.setPosition({mario.getPosition().x - 1280.0f, mario.getPosition().y});
+		mariodeath.setPosition({ mariodeath.getPosition().x - 1280.0f, mariodeath.getPosition().y });
+		for (auto& i : GoombaDeathList) {
+			i.setPosition({ i.getPosition().x - 1280.0f, i.getPosition().y });
+		}
 	}
 }
 void LevelUpdatePos() {

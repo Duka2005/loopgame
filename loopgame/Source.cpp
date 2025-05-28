@@ -8,6 +8,7 @@
 #include "Headers/BackgroundColor.hpp"
 #include "Headers/Sound.hpp"
 #include "Headers/Enemy.hpp"
+#include "Headers/EnemyDeath.hpp"
 
 #include <ctre.hpp>
 
@@ -51,11 +52,12 @@ int main()
 			MarioVerticleUpdate(dt);
 			MoveFromOffset();
 			MarioDeathUpdate(dt);
-			GoombaVerticleUpdate(dt);
 			GoombaHorizonUpdate(dt);
+			GoombaVerticleUpdate(dt);
 			GoombaMovement(dt);
-			SpinyVerticleUpdate(dt);
+			GoombaDeathVerticleUpdate(dt);
 			SpinyHorizonUpdate(dt);
+			SpinyVerticleUpdate(dt);
 			SpinyMovement(dt);
 			setView(dt);
 		}
@@ -66,6 +68,7 @@ int main()
 		CheckPiranhaGroundCollision();
 		CheckGoombaCollision();
 		CheckSpinyCollision();
+		TimeVisibleGoombaDeath();
 
 		updateAnimation();
 
@@ -75,6 +78,7 @@ int main()
 		rTexture.draw(Backgroundcolor);
 		LevelDraw();
 		DrawEnemy();
+		DrawGoombaDeath();
 		if (CanMarioControl) rTexture.draw(mario);
 		else rTexture.draw(mariodeath);
 		rTexture.display();
