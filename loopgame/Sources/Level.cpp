@@ -10,7 +10,7 @@
 
 std::random_device rd;
 std::vector<Level> lvldata;
-std::uniform_int_distribution<int> dist(1, 11);
+std::uniform_int_distribution<int> dist(1, 15);
 int global_pos = 2;
 int global_prev = 0;
 

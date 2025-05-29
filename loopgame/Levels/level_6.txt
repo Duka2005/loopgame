@@ -548,6 +548,15 @@ block_181_y=0
 block_182=Block 002
 block_182_x=0
 block_182_y=0
+block_183=Block 002
+block_183_x=320
+block_183_y=320
+block_184=Block 002
+block_184_x=704
+block_184_y=320
+block_185=Block 002
+block_185_x=768
+block_185_y=384
 [NPC ELEMENTS]
 npc_0=Common 001
 npc_0_set=0
