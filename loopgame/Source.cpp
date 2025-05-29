@@ -29,7 +29,6 @@ int main()
 
 	PiranhaGroundAnimationInit();
 	GoombaAnimationInit();
-	SpinyAnimationInit();
 
 	while (window.isOpen()) {
 		while (const std::optional event = window.pollEvent()) {

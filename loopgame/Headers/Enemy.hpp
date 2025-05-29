@@ -30,7 +30,6 @@ extern void GoombaVerticleUpdate(float dt);
 extern void GoombaHorizonUpdate(float dt);
 
 extern void AddSpiny(Level& lvl, float x, float y);
-extern void SpinyAnimationInit();
 extern void CheckSpinyCollision();
 extern void SpinyMovement(float dt);
 extern void SpinyVerticleUpdate(float dt);

@@ -188,10 +188,7 @@ bool SpinyDirection = FirstSpinyDirection;
 void AddSpiny(Level& lvl, float x, float y) {
 	lvl.spiny_data.push_back(SpinyEnemy(SpinyTexture));
 	lvl.spiny_origin_pos.push_back(sf::Vector2f({ x,y }));
-}
-
-void SpinyAnimationInit() {
-	SpinyAnimation.setAnimation(0, 1, 33, 32, 0, 14);
+	lvl.spiny_data.back().m_animation.setAnimation(0, 1, 33, 32, 0, 14);
 }
 
 void CheckSpinyCollision() {
@@ -264,7 +261,7 @@ void SpinyHorizonUpdate(float dt) {
 				if (pos.x != -1) {
 					i.spiny_origin_pos[j] = { pos.x - 31.0f - i.pos * 1280.0f , i.spiny_origin_pos[j].y };
 					i.spiny_data[j].setSpinyDirection(true);
-					SpinyAnimation.setAnimation(0, 1, 33, 32, 1, 14);
+					i.spiny_data[j].m_animation.setYPos(1);
 				}
 			}
 			else if (i.spiny_data[j].getSpinyDirection()) {
@@ -279,7 +276,7 @@ void SpinyHorizonUpdate(float dt) {
 				if (pos.x != -1) {
 					i.spiny_origin_pos[j] = { pos.x + 33.0f - i.pos * 1280.0f , i.spiny_origin_pos[j].y };
 					i.spiny_data[j].setSpinyDirection(false);
-					SpinyAnimation.setAnimation(0, 1, 33, 32, 0, 14);
+					i.spiny_data[j].m_animation.setYPos(0);
 				}
 			}
 		}
@@ -299,8 +296,8 @@ void DrawEnemy() {
 			rTexture.draw(j);
 		}
 		for (auto& j : i.spiny_data) {
-			SpinyAnimation.silentupdate();
-			j.setTextureRect(SpinyAnimation.getAnimationTextureRect(), true);
+			j.m_animation.silentupdate();
+			j.setTextureRect(j.m_animation.getAnimationTextureRect(), true);
 			rTexture.draw(j);
 		}
 	}

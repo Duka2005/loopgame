@@ -1,4 +1,5 @@
 #include "../Headers/GameClass.hpp"
+#include "../Headers/LocalAnimationManager.hpp"
 
 //Goomba
 void GoombaEnemy::draw(sf::RenderTarget& target, sf::RenderStates states) const

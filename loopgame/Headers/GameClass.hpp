@@ -3,6 +3,7 @@
 #define GAMECLASS_HPP
 
 #include <SFML/Graphics.hpp>
+#include "LocalAnimationManager.hpp"
 
 class GoombaEnemy : public sf::Drawable, public sf::Transformable {
 public:
@@ -68,6 +69,7 @@ public:
 	bool getSpinyDirection();
 	float getSpinySpeed();
 	void SetSpinyTexture(sf::Texture GoombaTexture);
+	LocalAnimationManager m_animation;
 private:
 	float m_SpinyXvelocity = 0.0f;
 	float m_SpinyYvelocity = 0.0f;
