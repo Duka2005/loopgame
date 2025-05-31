@@ -28,12 +28,14 @@ extern void DeleteGoomba(const float x, const float y);
 extern void GoombaMovement(float dt);
 extern void GoombaVerticleUpdate(float dt);
 extern void GoombaHorizonUpdate(float dt);
+extern void GoombaStatusUpdate();
 
 extern void AddSpiny(Level& lvl, float x, float y);
 extern void CheckSpinyCollision();
 extern void SpinyMovement(float dt);
 extern void SpinyVerticleUpdate(float dt);
 extern void SpinyHorizonUpdate(float dt);
+extern void SpinyStatusUpdate();
 
 extern void DrawEnemy();
 #endif

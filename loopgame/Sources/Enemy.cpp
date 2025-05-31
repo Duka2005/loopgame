@@ -69,6 +69,8 @@ void CheckGoombaCollision() {
 	if (processdeath) return;
 	for (auto& i : lvldata) {
 		for (unsigned j = 0; j < i.goomba_data.size(); ++j) {
+			if (i.goomba_data[j].isDisable()) continue;
+
 			if (isCollide(mariomain, mario, getGlobalHitbox(GoombaHitBox, i.goomba_data[j].getPosition(), i.goomba_data[j].getOrigin()))) {
 				if (((i.goomba_data[j].getPosition().y - 16.0f) <= mario.getPosition().y) && (Yvelocity > 0.0f)) {
 					if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Z)) Yvelocity = -9.0f;
@@ -105,6 +107,8 @@ void DeleteGoomba(const float x, const float y) {
 void GoombaMovement(float dt) {
 	for (auto& i : lvldata) {
 		for (unsigned int j = 0; j < i.goomba_data.size(); ++j) {
+			if (i.goomba_data[j].isDisable()) continue;
+
 			if (i.goomba_data[j].getGoombaXvelocity() < 1.0f && i.goomba_data[j].getGoombaDirection()) i.goomba_data[j].setGoombaXvelocity(1.0f);
 
 			if (i.goomba_data[j].getGoombaDirection()) i.goomba_origin_pos[j] = { i.goomba_origin_pos[j].x - i.goomba_data[j].getGoombaXvelocity() * dt, i.goomba_origin_pos[j].y };
@@ -119,6 +123,8 @@ void GoombaVerticleUpdate(float dt) {
 	sf::Vector2f pos({ -1, -1 });
 	for (auto& i : lvldata) {
 		for (unsigned int j = 0; j < i.goomba_data.size(); ++j) {
+			if (i.goomba_data[j].isDisable()) continue;
+
 			i.goomba_data[j].setGoombaYvelocity(i.goomba_data[j].getGoombaYvelocity() + (i.goomba_data[j].getGoombaYvelocity() < 10.0f ? 1.0f * dt * 0.3f : 0.0f));
 			if (i.goomba_data[j].getGoombaYvelocity() > 10.0f) i.goomba_data[j].setGoombaYvelocity(10.0f);
 			i.goomba_origin_pos[j] = { i.goomba_origin_pos[j].x, i.goomba_origin_pos[j].y + i.goomba_data[j].getGoombaYvelocity() * dt };
@@ -146,6 +152,8 @@ void GoombaHorizonUpdate(float dt) {
 	sf::Vector2f pos({ -1, -1 });
 	for (auto& i : lvldata) {
 		for (unsigned int j = 0; j < i.goomba_data.size(); ++j) {
+			if (i.goomba_data[j].isDisable()) continue;
+
 			pos = { -1,-1 };
 			if (!i.goomba_data[j].getGoombaDirection()) {
 				const sf::FloatRect goombaGlobal = getGlobalHitbox(goombaright, sf::Vector2f({ i.goomba_origin_pos[j].x + i.pos * 1280.0f , i.goomba_origin_pos[j].y}), i.goomba_data[j].getOrigin());
@@ -178,6 +186,16 @@ void GoombaHorizonUpdate(float dt) {
 		}
 	}
 }
+
+void GoombaStatusUpdate() {
+	for (auto& i : lvldata) {
+		for (unsigned int j = 0; j < i.goomba_data.size(); ++j) {
+			if (!isOutScreenRight(sf::Vector2f({ i.goomba_origin_pos[j].x + 1280.0f * i.pos, i.goomba_origin_pos[j].y }), sf::Vector2f(64, 0))) {
+				if (i.goomba_data[j].isDisable()) i.goomba_data[j].setDisable(false);
+			}
+		}
+	}
+}
 //Spiny
 float SpinyXvelocity = 0.0f;
 float SpinyYvelocity = 0.0f;
@@ -188,14 +206,16 @@ bool SpinyDirection = FirstSpinyDirection;
 void AddSpiny(Level& lvl, float x, float y) {
 	lvl.spiny_data.push_back(SpinyEnemy(SpinyTexture));
 	lvl.spiny_origin_pos.push_back(sf::Vector2f({ x,y }));
-	lvl.spiny_data.back().m_animation.setAnimation(0, 1, 33, 32, 0, 14);
+	lvl.spiny_data.back().m_animation.setAnimation(0, 1, 33, 32, 1, 14);
 }
 
 void CheckSpinyCollision() {
 	sf::FloatRect SpinyHitBox({ 0, 0 }, { 33, 32 });
 	if (processdeath) return;
-	for (const auto& i : lvldata) {
-		for (const auto& j : i.spiny_data) {
+	for (auto& i : lvldata) {
+		for (auto& j : i.spiny_data) {
+			if (j.isDisable()) continue;
+
 			if (isCollide(mariomain, mario, getGlobalHitbox(SpinyHitBox, j.getPosition(), j.getOrigin()))) {
 				MarioDeath();
 				break;
@@ -207,6 +227,8 @@ void CheckSpinyCollision() {
 void SpinyMovement(float dt) {
 	for (auto& i : lvldata) {
 		for (unsigned int j = 0; j < i.spiny_data.size(); ++j) {
+			if (i.spiny_data[j].isDisable()) continue;
+
 			if (i.spiny_data[j].getSpinyXvelocity() < 1.0f && i.spiny_data[j].getSpinyDirection()) i.spiny_data[j].setSpinyXvelocity(1.0f);
 
 			if (i.spiny_data[j].getSpinyDirection()) i.spiny_origin_pos[j] = { i.spiny_origin_pos[j].x - i.spiny_data[j].getSpinyXvelocity() * dt, i.spiny_origin_pos[j].y };
@@ -221,6 +243,8 @@ void SpinyVerticleUpdate(float dt) {
 	sf::Vector2f pos({ -1, -1 });
 	for (auto& i : lvldata) {
 		for (unsigned int j = 0; j < i.spiny_data.size(); ++j) {
+			if (i.spiny_data[j].isDisable()) continue;
+
 			i.spiny_data[j].setSpinyYvelocity(i.spiny_data[j].getSpinyYvelocity() + (i.spiny_data[j].getSpinyYvelocity() < 10.0f ? 1.0f * dt * 0.3f : 0.0f));
 			if (i.spiny_data[j].getSpinyYvelocity() > 10.0f) i.spiny_data[j].setSpinyYvelocity(10.0f);
 			i.spiny_origin_pos[j] = { i.spiny_origin_pos[j].x, i.spiny_origin_pos[j].y + i.spiny_data[j].getSpinyYvelocity() * dt };
@@ -248,6 +272,8 @@ void SpinyHorizonUpdate(float dt) {
 	sf::Vector2f pos({ -1, -1 });
 	for (auto& i : lvldata) {
 		for (unsigned int j = 0; j < i.spiny_data.size(); ++j) {
+			if (i.spiny_data[j].isDisable()) continue;
+
 			pos = { -1,-1 };
 			if (!i.spiny_data[j].getSpinyDirection()) {
 				const sf::FloatRect spinyGlobal = getGlobalHitbox(spinyright, sf::Vector2f({ i.spiny_origin_pos[j].x + i.pos * 1280.0f , i.spiny_origin_pos[j].y }), i.spiny_data[j].getOrigin());
@@ -278,6 +304,16 @@ void SpinyHorizonUpdate(float dt) {
 					i.spiny_data[j].setSpinyDirection(false);
 					i.spiny_data[j].m_animation.setYPos(0);
 				}
+			}
+		}
+	}
+}
+
+void SpinyStatusUpdate() {
+	for (auto& i : lvldata) {
+		for (unsigned int j = 0; j < i.spiny_data.size(); ++j) {
+			if (!isOutScreenRight(sf::Vector2f({ i.spiny_origin_pos[j].x + 1280.0f * i.pos, i.spiny_origin_pos[j].y }), sf::Vector2f(64, 0))) {
+				if (i.spiny_data[j].isDisable()) i.spiny_data[j].setDisable(false);
 			}
 		}
 	}

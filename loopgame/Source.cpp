@@ -60,6 +60,9 @@ int main()
 			SpinyMovement(dt);
 			setView(dt);
 		}
+		GoombaStatusUpdate();
+		SpinyStatusUpdate();
+
 		CheckLevelAvaliable();
 		LevelUpdatePos();
 		updateView();

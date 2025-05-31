@@ -61,3 +61,8 @@ void setView(float dt) {
 	}
 	initx += dt * speedtime;
 }
+
+bool isOutScreenRight(const sf::Vector2f& pos, const sf::Vector2f& offset) {
+	if (initx + 320.0f + offset.x > pos.x) return false;
+	else return true;
+}

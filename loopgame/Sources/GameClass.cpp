@@ -64,6 +64,14 @@ void GoombaEnemy::setTextureRect(const sf::IntRect& rect, const bool resetSize) 
 	}
 }
 
+bool GoombaEnemy::isDisable() {
+	return m_GoombaisDisable;
+}
+
+void GoombaEnemy::setDisable(bool result) {
+	m_GoombaisDisable = result;
+}
+
 //Spiny
 void SpinyEnemy::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
@@ -125,6 +133,14 @@ void SpinyEnemy::setTextureRect(const sf::IntRect& rect, const bool resetSize) {
 		m_vertices[2].position = sf::Vector2f(0, rect.size.y);
 		m_vertices[3].position = sf::Vector2f(rect.size.x, rect.size.y);
 	}
+}
+
+bool SpinyEnemy::isDisable() {
+	return m_SpinyisDisable;
+}
+
+void SpinyEnemy::setDisable(bool result) {
+	m_SpinyisDisable = result;
 }
 
 void Level::UpdateTilePosition() {

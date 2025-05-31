@@ -30,6 +30,8 @@ public:
 	float getGoombaYvelocity();
 	bool getGoombaDirection();
 	float getGoombaSpeed();
+	bool isDisable();
+	void setDisable(bool result);
 	void SetGoombaTexture(sf::Texture GoombaTexture);
 private:
 	float m_GoombaXvelocity = 0.0f;
@@ -37,6 +39,7 @@ private:
 	float m_GoombaSpeed = 1.0f;
 	bool m_FirstGoombaDirection = true;
 	bool m_GoombaDirection = true;
+	bool m_GoombaisDisable = true;
 
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 	sf::VertexArray m_vertices;
@@ -68,6 +71,8 @@ public:
 	float getSpinyYvelocity();
 	bool getSpinyDirection();
 	float getSpinySpeed();
+	bool isDisable();
+	void setDisable(bool result);
 	void SetSpinyTexture(sf::Texture GoombaTexture);
 	LocalAnimationManager m_animation;
 private:
@@ -76,6 +81,7 @@ private:
 	float m_SpinySpeed = 1.0f;
 	bool m_FirstSpinyDirection = true;
 	bool m_SpinyDirection = true;
+	bool m_SpinyisDisable = true;
 
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 	sf::VertexArray m_vertices;
