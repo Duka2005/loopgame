@@ -125,6 +125,9 @@ void GenLevel(Level& lvl, std::string level, int position) {
         else if (enemy_name[i] == "Common 016") {
             AddSpiny(lvl, enemypos_x[i], enemypos_y[i]);
         }
+        if (enemy_name[i] == "Common 020") {
+            AddPiranha(lvl, enemypos_x[i], enemypos_y[i]);
+        }
     }
 
     block_x.clear();

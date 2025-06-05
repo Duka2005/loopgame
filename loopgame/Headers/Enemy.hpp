@@ -37,5 +37,9 @@ extern void SpinyVerticleUpdate(float dt);
 extern void SpinyHorizonUpdate(float dt);
 extern void SpinyStatusUpdate();
 
+extern void AddPiranha(Level& lvl, float x, float y);
+extern void CheckPiranhaCollision();
+extern void PiranhaAIMovementUpdate(const float deltaTime);
+
 extern void DrawEnemy();
 #endif

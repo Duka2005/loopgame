@@ -57,6 +57,7 @@ int main()
 			GoombaDeathVerticleUpdate(dt);
 			SpinyHorizonUpdate(dt);
 			SpinyVerticleUpdate(dt);
+			PiranhaAIMovementUpdate(dt);
 			SpinyMovement(dt);
 			setView(dt);
 		}
@@ -68,8 +69,10 @@ int main()
 		updateView();
 		BgColorInitPos();
 		CheckPiranhaGroundCollision();
+		CheckPiranhaCollision();
 		CheckGoombaCollision();
 		CheckSpinyCollision();
+		MarioStuck();
 		TimeVisibleGoombaDeath();
 
 		updateAnimation();
@@ -78,8 +81,8 @@ int main()
 		rTexture.setView(view);
 		window.setView(viewwin);
 		rTexture.draw(Backgroundcolor);
-		LevelDraw();
 		DrawEnemy();
+		LevelDraw();
 		DrawGoombaDeath();
 		if (CanMarioControl) rTexture.draw(mario);
 		else rTexture.draw(mariodeath);

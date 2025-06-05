@@ -269,6 +269,15 @@ void MarioDeathUpdate(float dt) {
 	}
 }
 
+void MarioStuck() {
+	sf::Vector2f pos = CheckMarioCollision(mario, marioright);
+	if (processdeath) return;
+	if (mario.getPosition().x <= initx - 320.0f + 10.0f && pos.x != -1) {
+		MarioDeath();
+		return;
+	}
+}
+
 void MarioDeath() {
 	music.stop();
 	CanMarioControl = false;

@@ -31,6 +31,7 @@ extern void updateAnimation();
 extern void MarioDeathUpdate(float dt);
 extern void MarioInit();
 extern void MoveFromOffset();
+extern void MarioStuck();
 extern void MarioDeath();
 
 #endif
