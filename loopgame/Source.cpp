@@ -77,6 +77,8 @@ int main()
 
 		updateAnimation();
 
+		checktimeupspeed();
+
 		rTexture.clear();
 		rTexture.setView(view);
 		window.setView(viewwin);

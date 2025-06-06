@@ -8,6 +8,8 @@ sf::SoundBuffer deathbuffer("Resources/Sound/mario_death.mp3");
 sf::Sound death(deathbuffer);
 sf::SoundBuffer goombadeathbuffer("Resources/Sound/stomp.wav");
 sf::Sound goombadeath(goombadeathbuffer);
+sf::SoundBuffer speedupbuffer("Resources/Sound/speedup.mp3");
+sf::Sound speedup(speedupbuffer);
 
 //Music
 sf::Music music("Resources/Music/musicgame.ogg");

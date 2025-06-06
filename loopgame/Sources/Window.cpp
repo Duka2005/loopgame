@@ -4,14 +4,22 @@
 #include <iostream>
 #include "../Headers/Window.hpp"
 #include "../Headers/Mario.hpp"
+#include "../Headers/Sound.hpp"
+
+sf::Clock Gameclock;
 
 sf::RenderWindow window(sf::VideoMode({ 640, 480 }), "Mario Runner!");
 sf::RenderTexture rTexture({ 640, 480 });
 sf::View viewwin;
 sf::View view;
 
-float speedtime = 3.5f;
+float speedtime = 2.0f;
+float prev_speedtime = speedtime;
 float initx = 320.0f;
+
+float stage1 = 120.0f;
+float stage2 = 240.0f;
+float stage3 = 480.0f;
 
 sf::View getLetterboxView(sf::View view, int windowWidth, int windowHeight) {
 	// Compares the aspect ratio of the window to the aspect ratio of the view,
@@ -65,4 +73,24 @@ void setView(float dt) {
 bool isOutScreenRight(const sf::Vector2f& pos, const sf::Vector2f& offset) {
 	if (initx + 320.0f + offset.x > pos.x) return false;
 	else return true;
+}
+
+void checktimeupspeed() {
+	if (!processdeath) {
+		if (prev_speedtime == 2.0f && Gameclock.getElapsedTime().asSeconds() >= stage1 && Gameclock.getElapsedTime().asSeconds() < stage2) {
+			speedup.play();
+			speedtime = 2.5f;
+			prev_speedtime = speedtime;
+		}
+		else if (prev_speedtime == 2.5f && Gameclock.getElapsedTime().asSeconds() >= stage2 && Gameclock.getElapsedTime().asSeconds() < stage3) {
+			speedup.play();
+			speedtime = 3.0f;
+			prev_speedtime = speedtime;
+		}
+		else if (prev_speedtime == 3.0f && Gameclock.getElapsedTime().asSeconds() >= stage3) {
+			speedup.play();
+			speedtime = 3.5f;
+			prev_speedtime = speedtime;
+		}
+	}
 }

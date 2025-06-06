@@ -2,6 +2,8 @@
 #ifndef WINDOW_HPP
 #define WINDOW_HPP
 
+extern sf::Clock Gameclock;
+
 extern sf::RenderWindow window;
 extern sf::RenderTexture rTexture;
 
@@ -15,5 +17,11 @@ extern bool isOutScreenRight(const sf::Vector2f& pos, const sf::Vector2f& offset
 
 extern float initx;
 extern float speedtime;
+
+extern float stage1;
+extern float stage2;
+extern float stage3;
+
+extern void checktimeupspeed();
 
 #endif
