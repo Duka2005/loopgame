@@ -70,7 +70,7 @@ void AddPiranha(Level& lvl, float x, float y) {
 }
 
 void CheckPiranhaCollision() {
-	sf::FloatRect PiranhaHitBox({ 16, 17 }, { 48, 64 });
+	sf::FloatRect PiranhaHitBox({ 16, 17 }, { 32, 64 });
 	if (processdeath) return;
 	for (const auto& i : lvldata) {
 		for (const auto& j : i.piranha_data) {
