@@ -13,5 +13,6 @@ extern void AddGoombaDeath(float x, float y);
 extern void GoombaDeathVerticleUpdate(float dt);
 extern void DrawGoombaDeath();
 extern void DeleteGoombaDeath(const float x, const float y);
+extern void GoombaDeathPause();
 extern void TimeVisibleGoombaDeath();
 #endif

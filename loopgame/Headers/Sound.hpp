@@ -12,6 +12,10 @@ extern sf::SoundBuffer goombadeathbuffer;
 extern sf::Sound goombadeath;
 extern sf::SoundBuffer speedupbuffer;
 extern sf::Sound speedup;
+extern sf::SoundBuffer pausesoundbuffer;
+extern sf::Sound pausesound;
+extern sf::SoundBuffer resumesoundbuffer;
+extern sf::Sound resumesound;
 
 extern sf::Music music;
 

@@ -12,7 +12,9 @@ public:
 	std::string textContent = "";
 	std::vector<sf::Sprite> text;
 	std::string id;
+	bool isVisible = true;
 };
+extern void SetTextVisible(const bool& vis, const std::string& id);
 extern void FontInit();
 extern void AddText(const std::string &id, const std::string &text, float x, float y);
 extern void EditText(const std::string &NewText, const std::string &id);

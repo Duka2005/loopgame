@@ -219,6 +219,7 @@ void MarioInit() {
 
 // animation cua nhan vat
 void updateAnimation() {
+	if (GAME_PAUSE) return;
 	int ypos = (!MarioDirection) ? 0 : 1;
 	if (CanMarioControl) {
 		if (MarioCurrentFalling) {

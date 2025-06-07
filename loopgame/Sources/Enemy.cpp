@@ -408,21 +408,21 @@ void SpinyStatusUpdate() {
 void DrawEnemy() {
 	for (auto& i : lvldata) {
 		for (auto& j : i.piranha_ground_data) {
-			PiranhaGroundAnimation.update(j);
+			if (!GAME_PAUSE)PiranhaGroundAnimation.update(j);
 			rTexture.draw(j);
 		}
 		for (auto& j : i.goomba_data) {
-			GoombaAnimation.silentupdate();
+			if (!GAME_PAUSE)GoombaAnimation.silentupdate();
 			j.setTextureRect(GoombaAnimation.getAnimationTextureRect(), true);
 			rTexture.draw(j);
 		}
 		for (auto& j : i.spiny_data) {
-			j.m_animation.silentupdate();
+			if (!GAME_PAUSE)j.m_animation.silentupdate();
 			j.setTextureRect(j.m_animation.getAnimationTextureRect(), true);
 			rTexture.draw(j);
 		}
 		for (auto& j : i.piranha_data) {
-			j.m_animation.silentupdate();
+			if (!GAME_PAUSE) j.m_animation.silentupdate();
 			j.setTextureRect(j.m_animation.getAnimationTextureRect(), true);
 			rTexture.draw(j);
 		}

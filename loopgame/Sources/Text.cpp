@@ -35,6 +35,7 @@ void AddText(const std::string &id, const std::string &text, const float x, floa
 		Init->y = y;
 		Init->id = id;
 		Init->textContent = text;
+		Init->isVisible = true;
 		int Counter = 0;
 		for (const auto& i : text) {
 			Init->text.push_back(sf::Sprite(FontGame, GetFontTexture(i)));
@@ -68,6 +69,21 @@ void EditText(const std::string &NewText, const std::string &id) {
 	}
 	else std::cout << "Cannot edit text ID " << id << " (Not existed ID)" << "\n";
 }
+void SetTextVisible(const bool& vis, const std::string& id) {
+	bool isFounded = false;
+	int IndexCounter = 0;
+	for (const auto& i : TextList) {
+		if (i->id == id) {
+			isFounded = true;
+			break;
+		}
+		++IndexCounter;
+	}
+	if (isFounded) {
+		TextList[IndexCounter]->isVisible = vis;
+	}
+	else std::cout << "Cannot edit position ID " << id << " (Not existed ID)" << "\n";
+}
 inline void EditPosition(const float NewX, const float NewY, const std::string &id) {
 	bool isFounded = false;
 	int IndexCounter = 0;
@@ -94,6 +110,7 @@ void UpdatePositionCharacter() {
 }
 void UpdateText() {
 	for (const auto& i : TextList) {
+		if (!i->isVisible) continue;
 		for (const auto& j : i->text) {
 			rTexture.draw(j);
 		}

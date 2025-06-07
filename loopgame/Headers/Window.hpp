@@ -2,6 +2,8 @@
 #ifndef WINDOW_HPP
 #define WINDOW_HPP
 
+extern bool GAME_PAUSE;
+
 extern sf::Clock Gameclock;
 
 extern sf::RenderWindow window;

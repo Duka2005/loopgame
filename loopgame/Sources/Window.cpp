@@ -6,6 +6,8 @@
 #include "../Headers/Mario.hpp"
 #include "../Headers/Sound.hpp"
 
+bool GAME_PAUSE = false;
+
 sf::Clock Gameclock;
 
 sf::RenderWindow window(sf::VideoMode({ 640, 480 }), "Mario Runner!");

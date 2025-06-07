@@ -70,7 +70,15 @@ void DeleteGoombaDeath(const float x, const float y) {
 	}
 }
 
+void GoombaDeathPause() {
+	for (auto& i : GoombaDeathClockList) {
+		if (i.isRunning()) i.stop();
+		else i.start();
+	}
+}
+
 void TimeVisibleGoombaDeath() {
+	if (GAME_PAUSE) return;
 	for (unsigned i = 0; i < GoombaDeathList.size(); ++i) {
 		if (GoombaDeathClockList[i].getElapsedTime().asSeconds() >= 4) {
 			DeleteGoombaDeath(GoombaDeathList[i].getPosition().x, GoombaDeathList[i].getPosition().y);
