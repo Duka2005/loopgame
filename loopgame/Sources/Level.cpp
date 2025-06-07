@@ -48,6 +48,7 @@ void CheckLevelAvaliable() {
 		lvldata.push_back(Level());
 		GenLevel(lvldata.back(), getRandomLevel(), 2);
 		initx -= 1280.0f;
+		prev_initx -= 1280.0f;
 		mario.setPosition({mario.getPosition().x - 1280.0f, mario.getPosition().y});
 		mariodeath.setPosition({ mariodeath.getPosition().x - 1280.0f, mariodeath.getPosition().y });
 		for (auto& i : GoombaDeathList) {

@@ -9,12 +9,16 @@
 #include "Headers/Sound.hpp"
 #include "Headers/Enemy.hpp"
 #include "Headers/EnemyDeath.hpp"
+#include "Headers/Text.hpp"
 
 #include <ctre.hpp>
 
 int main()
 {
+	int scoregame = 0;
+
 	kairos::Timestep timestep;
+	kairos::FpsLite fpsGame;
 	timestep.setStep(1.0f / 500.0f);
 	timestep.setMaxAccumulation(1.0f / 40.0f);
 
@@ -25,10 +29,16 @@ int main()
 	MarioInit();
 	ViewInit();
 	LevelInit();
+	FontInit();
 	SetMarioPosition(320, 416);
 
 	PiranhaGroundAnimationInit();
 	GoombaAnimationInit();
+
+	float delta_initx = 0.0f;
+	AddText("SCORE", "", 32, 40);
+	AddText("SCORETEXT", "SCORE", 32, 24);
+	AddText("FPS", "", 0, 464);
 
 	while (window.isOpen()) {
 		while (const std::optional event = window.pollEvent()) {
@@ -42,7 +52,13 @@ int main()
 			death.stop();
 			window.close();
 		}
+
+		EditText(std::to_string(scoregame) + "00", "SCORE");
+		EditText("FPS: " + std::to_string(static_cast<int>(fpsGame.getFps())), "FPS");
+
 		//Check when to generate map
+		prev_initx = initx;
+		fpsGame.update();
 		timestep.addFrame();
 		while (timestep.isUpdateRequired()) {
 			const float dt = timestep.getStepAsFloat() * 50.0f;
@@ -61,12 +77,19 @@ int main()
 			SpinyMovement(dt);
 			setView(dt);
 		}
+		delta_initx += initx - prev_initx;
+		if (static_cast<int>(delta_initx) - 160 >= 0) {
+			delta_initx -= 160;
+			scoregame += 1;
+		}
+
 		GoombaStatusUpdate();
 		SpinyStatusUpdate();
 
 		CheckLevelAvaliable();
 		LevelUpdatePos();
 		updateView();
+		UpdatePositionCharacter();
 		BgColorInitPos();
 		CheckPiranhaGroundCollision();
 		CheckPiranhaCollision();
@@ -88,6 +111,7 @@ int main()
 		DrawGoombaDeath();
 		if (CanMarioControl) rTexture.draw(mario);
 		else rTexture.draw(mariodeath);
+		UpdateText();
 		rTexture.display();
 		window.clear();
 		window.draw(sf::Sprite(rTexture.getTexture()));

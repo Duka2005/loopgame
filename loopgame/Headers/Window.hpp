@@ -16,6 +16,7 @@ extern void updateView();
 extern bool isOutScreenRight(const sf::Vector2f& pos, const sf::Vector2f& offset);
 
 extern float initx;
+extern float prev_initx;
 extern float speedtime;
 
 extern float stage1;

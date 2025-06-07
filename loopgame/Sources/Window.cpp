@@ -16,6 +16,7 @@ sf::View view;
 float speedtime = 2.0f;
 float prev_speedtime = speedtime;
 float initx = 320.0f;
+float prev_initx = 320.0f;
 
 float stage1 = 120.0f;
 float stage2 = 240.0f;
