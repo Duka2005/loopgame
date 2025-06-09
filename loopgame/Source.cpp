@@ -15,17 +15,22 @@
 
 int main()
 {
-	int CurrentScene = 1;
+	int CurrentScene = 0;
 
 	float mouse_x, mouse_y;
 
 	const auto cursorhand = sf::Cursor::createFromSystem(sf::Cursor::Type::Hand).value();
 	const auto cursorarrow = sf::Cursor::createFromSystem(sf::Cursor::Type::Arrow).value();
 
+	//Icon
+	sf::Image icon;
+	icon.loadFromFile("icon.png");
+	window.setIcon(icon);
+
 	//Mainmenu
 	sf::Texture backgroundmainmenutexture("Resources/Image/Mainmenu/backgroundmainmenu.png");
 	sf::Sprite  backgroundmainmenu(backgroundmainmenutexture);
-	backgroundmainmenu.setPosition({ 0.0f,0.0f });
+	backgroundmainmenu.setPosition({ initx - 320.0f, 0 });
 	sf::Texture boxtexture("Resources/Image/Mainmenu/box.png");
 	sf::Sprite  boxmainmenu(boxtexture);
 	boxmainmenu.setPosition({ 177.0f,288.0f });
@@ -87,7 +92,7 @@ int main()
 			}
 		}
 		
-		if (CurrentScene == 1) {
+		if (CurrentScene == 0) {
 			if (!(mainmenumusic.getStatus() == sf::Music::Status::Playing)) mainmenumusic.play();
 			const sf::Vector2i mouse = sf::Mouse::getPosition(window);
 			mouse_x = (static_cast<float>(mouse.x) - ViewXOff / 2.0f) * (640 / (static_cast<float>(window.getSize().x) - ViewXOff));
@@ -199,7 +204,7 @@ int main()
 			}
 			if (MarioDeathClock.getElapsedTime().asSeconds() >= 4) {
 				death.stop();
-				CurrentScene = 1;
+				CurrentScene = 0;
 				SetMarioPosition(320, 416);
 				MarioDeathClock.reset();
 				processdeath = false;
