@@ -11,4 +11,5 @@ extern void LevelInit();
 extern void LevelDraw();
 extern void CheckLevelAvaliable();
 extern void LevelUpdatePos();
+extern void DeleteAllLevel();
 #endif

@@ -39,6 +39,10 @@ void LevelInit() {
 	GenLevel(lvldata.back(), getRandomLevel(), 2);
 }
 
+void DeleteAllLevel() {
+	lvldata.clear();
+}
+
 //generate new level map in bottom
 void CheckLevelAvaliable() {
 	if (initx > (lvldata[0].pos + 2) * 1280) {

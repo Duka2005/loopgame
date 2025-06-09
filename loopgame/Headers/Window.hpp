@@ -26,5 +26,6 @@ extern float stage2;
 extern float stage3;
 
 extern void checktimeupspeed();
+extern float ViewXOff, ViewYOff;
 
 #endif

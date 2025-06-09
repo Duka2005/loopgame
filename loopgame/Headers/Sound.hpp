@@ -18,5 +18,6 @@ extern sf::SoundBuffer resumesoundbuffer;
 extern sf::Sound resumesound;
 
 extern sf::Music music;
+extern sf::Music mainmenumusic;
 
 #endif

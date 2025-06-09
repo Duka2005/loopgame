@@ -17,3 +17,4 @@ sf::Sound resumesound(resumesoundbuffer);
 
 //Music
 sf::Music music("Resources/Music/musicgame.ogg");
+sf::Music mainmenumusic("Resources/Music/mainmenu.mp3");

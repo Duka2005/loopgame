@@ -15,6 +15,8 @@ sf::RenderTexture rTexture({ 640, 480 });
 sf::View viewwin;
 sf::View view;
 
+float ViewXOff, ViewYOff;
+
 float speedtime = 2.0f;
 float prev_speedtime = speedtime;
 float initx = 320.0f;
@@ -61,6 +63,11 @@ void ViewInit() {
 	view = sf::View(sf::FloatRect({ 0, 0 }, { 640, 480 }));
 }
 void updateView() {
+	const float vx = window.getSize().x / 640;
+	const float vy = window.getSize().y / 480;
+	const float min = std::min(vx, vy);
+	ViewXOff = window.getSize().x - (640 * min);
+	ViewYOff = window.getSize().y - (480 * min);
 	viewwin = getLetterboxView(view, window.getSize().x, window.getSize().y);
 	view.setCenter({ std::round(initx), 240.0f});
 	viewwin.setCenter(sf::Vector2f({ 640 / 2, 480 / 2 }));
