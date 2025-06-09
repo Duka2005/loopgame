@@ -176,6 +176,8 @@ int main()
 
 
 		else if (CurrentScene == 2) {
+			//std::cout << (!Gameclock.isRunning() ? "FALSE" : "TRUE") << "\n";
+
 			if (!Gameclock.isRunning()) Gameclock.start();
 			if (!GAME_PAUSE) {
 				if (!Gameclock.isRunning()) Gameclock.start();
@@ -212,6 +214,7 @@ int main()
 				initx = 320.0f;
 				speedtime = 2.0f;
 				scoregame = 0;
+				prev_speedtime = 2.0f;
 				DeleteAllLevel();
 				LevelInit();
 				MarioDirection = FirstMarioDirection;

@@ -24,6 +24,7 @@ extern float speedtime;
 extern float stage1;
 extern float stage2;
 extern float stage3;
+extern float prev_speedtime;
 
 extern void checktimeupspeed();
 extern float ViewXOff, ViewYOff;
