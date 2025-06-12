@@ -15,6 +15,8 @@ sf::RenderTexture rTexture({ 640, 480 });
 sf::View viewwin;
 sf::View view;
 
+int CurrentScene = 0;
+
 float ViewXOff, ViewYOff;
 
 float speedtime = 2.0f;

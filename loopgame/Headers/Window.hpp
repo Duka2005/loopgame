@@ -12,6 +12,8 @@ extern sf::RenderTexture rTexture;
 extern sf::View viewwin;
 extern sf::View view;
 
+extern int CurrentScene;
+
 extern void ViewInit();
 extern void setView(float dt);
 extern void updateView();

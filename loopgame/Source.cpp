@@ -10,39 +10,40 @@
 #include "Headers/Enemy.hpp"
 #include "Headers/EnemyDeath.hpp"
 #include "Headers/Text.hpp"
+#include "Headers/Scenes/Mainmenu.hpp"
+#include "Headers/Scenes/Options.hpp"
 
 #include <ctre.hpp>
 
 int main()
 {
-	int CurrentScene = 0;
-
-	float mouse_x, mouse_y;
-
-	const auto cursorhand = sf::Cursor::createFromSystem(sf::Cursor::Type::Hand).value();
-	const auto cursorarrow = sf::Cursor::createFromSystem(sf::Cursor::Type::Arrow).value();
-
 	//Icon
 	sf::Image icon;
 	icon.loadFromFile("icon.png");
 	window.setIcon(icon);
 
 	//Mainmenu
-	sf::Texture backgroundmainmenutexture("Resources/Image/Mainmenu/backgroundmainmenu.png");
-	sf::Sprite  backgroundmainmenu(backgroundmainmenutexture);
-	backgroundmainmenu.setPosition({ initx - 320.0f, 0 });
-	sf::Texture boxtexture("Resources/Image/Mainmenu/box.png");
-	sf::Sprite  boxmainmenu(boxtexture);
-	boxmainmenu.setPosition({ 177.0f,288.0f });
-	sf::Texture starttexture("Resources/Image/Mainmenu/start.png");
-	sf::Sprite  startbutton(starttexture);
-	startbutton.setPosition({ 279.0f,324.0f });
-	sf::Texture optionstexture("Resources/Image/Mainmenu/options.png");
-	sf::Sprite  optionsbutton(optionstexture);
-	optionsbutton.setPosition({ 268.0f,369.0f });
-	sf::Texture quittexture("Resources/Image/Mainmenu/quit.png");
-	sf::Sprite  quitbutton(quittexture);
-	quitbutton.setPosition({ 290.0f,415.0f });
+	SetMainmenuPos();
+
+	//Options
+	SetOptionsPos();
+
+	std::string lineoptions;
+	std::ifstream inputOptionsFile("options.txt");
+
+	while (std::getline(inputOptionsFile, lineoptions)) {
+		for (auto& match : ctre::search_all<"Music=(.*)">(lineoptions)) {
+			musicvolume = match.get<1>().to_number();
+		}
+		for (auto& match : ctre::search_all<"Sound=(.*)">(lineoptions)) {
+			soundvolume = match.get<1>().to_number();
+		}
+	}
+	inputOptionsFile.close();
+
+	AddText("MUSIC_VOLUME", "", 128 + 92 + 16 + 5, 136);
+	AddText("SOUND_VOLUME", "", 128 + 92 + 16 + 5, 182);
+
 
 	//Gameplay
 	int scoregame = 0;
@@ -88,73 +89,62 @@ int main()
 				if (keyPressed->scancode == sf::Keyboard::Scancode::P) {
 					GAME_PAUSE = !GAME_PAUSE;
 				}
+			}
+			if (const auto* mousePressed = event->getIf<sf::Event::MouseButtonPressed>()) {
+				if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && musicvolume > 0 && musicleftcanpress) {
+					musicvolume -= 10;
+				}
+				if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && musicvolume < 100 && musicrightcanpress) {
+					musicvolume += 10;
+				}
+				if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && soundvolume > 0 && soundleftcanpress) {
+					soundvolume -= 10;
+				}
+				if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && soundvolume < 100 && soundrightcanpress) {
+					soundvolume += 10;
+				}
+				if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && exitoptionscanpress) {
+					CurrentScene = 0;
+					std::ofstream outputOptionFile("options.txt");
 
+					if (outputOptionFile.is_open()) {
+						outputOptionFile << "Music=" << musicvolume << "\n";
+						outputOptionFile << "Sound=" << soundvolume << "\n";
+						outputOptionFile.close();
+					}
+				}
 			}
 		}
-		
+
+		music.setVolume(musicvolume);
+		mainmenumusic.setVolume(musicvolume);
+
+		jump.setVolume(soundvolume);
+		death.setVolume(soundvolume);
+		goombadeath.setVolume(soundvolume);
+		speedup.setVolume(soundvolume);
+		pausesound.setVolume(soundvolume);
+		resumesound.setVolume(soundvolume);
+
 		if (CurrentScene == 0) {
-			if (!(mainmenumusic.getStatus() == sf::Music::Status::Playing)) mainmenumusic.play();
-			const sf::Vector2i mouse = sf::Mouse::getPosition(window);
-			mouse_x = (static_cast<float>(mouse.x) - ViewXOff / 2.0f) * (640 / (static_cast<float>(window.getSize().x) - ViewXOff));
-			mouse_y = (static_cast<float>(mouse.y) - ViewYOff / 2.0f) * (480 / (static_cast<float>(window.getSize().y) - ViewYOff));
-
-
-			float startbutton_x1 = startbutton.getPosition().x;
-			float startbutton_x2 = startbutton_x1 + 82.0f;
-			float startbutton_y1 = startbutton.getPosition().y;
-			float startbutton_y2 = startbutton_y1 + 35.0f;
-
-			float optionsbutton_x1 = optionsbutton.getPosition().x;
-			float optionsbutton_x2 = optionsbutton_x1 + 104.0f;
-			float optionsbutton_y1 = optionsbutton.getPosition().y;
-			float optionsbutton_y2 = optionsbutton_y1 + 36.0f;
-
-			float quitbutton_x1 = quitbutton.getPosition().x;
-			float quitbutton_x2 = quitbutton_x1 + 60.0f;
-			float quitbutton_y1 = quitbutton.getPosition().y;
-			float quitbutton_y2 = quitbutton_y1 + 33.0f;
-
-			if ((mouse_x >= startbutton_x1) && (mouse_x <= startbutton_x2) && (mouse_y >= startbutton_y1) && (mouse_y <= startbutton_y2)) {
-				window.setMouseCursor(cursorhand);
-				if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
-					mainmenumusic.stop();
-					CurrentScene = 2;
-				}
+			if (!(mainmenumusic.getStatus() == sf::Music::Status::Playing) && !BlackBackgroundTrigger) {
+				blackscreen1[0].color = blackscreen1[1].color = blackscreen1[2].color = blackscreen1[3].color = sf::Color(0, 0, 0, 0);
+				mainmenumusic.play();
 			}
-			else if ((mouse_x < startbutton_x1) || (mouse_x > startbutton_x2) || (mouse_y < startbutton_y1) || (mouse_y > startbutton_y2)) {
-				if (!((mouse_x >= optionsbutton_x1) && (mouse_x <= optionsbutton_x2) && (mouse_y >= optionsbutton_y1) && (mouse_y <= optionsbutton_y2))) {
-					if (!((mouse_x >= quitbutton_x1) && (mouse_x <= quitbutton_x2) && (mouse_y >= quitbutton_y1) && (mouse_y <= quitbutton_y2))) {
-						window.setMouseCursor(cursorarrow);
-					}
-				}
+			
+			ActiveButtonMainMenu();
+
+			timestep.addFrame();
+			while (timestep.isUpdateRequired()) {
+				float dt{ timestep.getStepAsFloat() * 50.0f };
+				BlackScreenProcess(BlackBackgroundTrigger, dt, started, blackscreen1);
 			}
 
-			if ((mouse_x >= optionsbutton_x1) && (mouse_x <= optionsbutton_x2) && (mouse_y >= optionsbutton_y1) && (mouse_y <= optionsbutton_y2)) {
-				window.setMouseCursor(cursorhand);
-				if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
-				}
-			}
-			else if ((mouse_x < optionsbutton_x1) || (mouse_x > optionsbutton_x2) || (mouse_y < optionsbutton_y1) || (mouse_y > optionsbutton_y2)) {
-				if (!((mouse_x >= startbutton_x1) && (mouse_x <= startbutton_x2) && (mouse_y >= startbutton_y1) && (mouse_y <= startbutton_y2))) {
-					if (!((mouse_x >= quitbutton_x1) && (mouse_x <= quitbutton_x2) && (mouse_y >= quitbutton_y1) && (mouse_y <= quitbutton_y2))) {
-						window.setMouseCursor(cursorarrow);
-					}
-				}
-			}
-
-			if ((mouse_x >= quitbutton_x1) && (mouse_x <= quitbutton_x2) && (mouse_y >= quitbutton_y1) && (mouse_y <= quitbutton_y2)) {
-				window.setMouseCursor(cursorhand);
-				if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
-					mainmenumusic.stop();
-					window.close();
-				}
-			}
-			else if ((mouse_x < quitbutton_x1) || (mouse_x > quitbutton_x2) || (mouse_y < quitbutton_y1) || (mouse_y > quitbutton_y2)) {
-				if (!((mouse_x >= startbutton_x1) && (mouse_x <= startbutton_x2) && (mouse_y >= startbutton_y1) && (mouse_y <= startbutton_y2))) {
-					if (!((mouse_x >= optionsbutton_x1) && (mouse_x <= optionsbutton_x2) && (mouse_y >= optionsbutton_y1) && (mouse_y <= optionsbutton_y2))) {
-						window.setMouseCursor(cursorarrow);
-					}
-				}
+			if (started >= 255) {
+				mainmenumusic.stop();
+				CurrentScene = 2;
+				started = 0;
+				BlackBackgroundTrigger = false;
 			}
 			
 			updateView();
@@ -163,21 +153,44 @@ int main()
 
 			window.clear();
 			rTexture.clear();
-			rTexture.draw(backgroundmainmenu);
-			rTexture.draw(boxmainmenu);
-			rTexture.draw(startbutton);
-			rTexture.draw(optionsbutton);
-			rTexture.draw(quitbutton);
+			DrawMainMenu();
 			rTexture.display();
 
 			window.draw(sf::Sprite(rTexture.getTexture()));
 			window.display();
 		}
 
+		else if (CurrentScene == 1) {
+			if (!(mainmenumusic.getStatus() == sf::Music::Status::Playing) && !BlackBackgroundTrigger) mainmenumusic.play();
+			updateView();
+			rTexture.setView(view);
+			window.setView(viewwin);
+
+			EditText(std::to_string(musicvolume), "MUSIC_VOLUME");
+			EditText(std::to_string(soundvolume), "SOUND_VOLUME");
+
+			SetTextVisible(false, "SCORETEXT");
+			SetTextVisible(false, "PAUSETEXT1");
+			SetTextVisible(false, "PAUSETEXT2");
+			SetTextVisible(false, "SCORE");
+			SetTextVisible(false, "FPS");
+			SetTextVisible(true, "MUSIC_VOLUME");
+			SetTextVisible(true, "SOUND_VOLUME");
+
+			ActiveButtonOptions();
+
+			window.clear();
+			rTexture.clear();
+			DrawOptions();
+			UpdateText();
+
+			rTexture.display();
+
+			window.draw(sf::Sprite(rTexture.getTexture()));
+			window.display();
+		}
 
 		else if (CurrentScene == 2) {
-			//std::cout << (!Gameclock.isRunning() ? "FALSE" : "TRUE") << "\n";
-
 			if (!Gameclock.isRunning()) Gameclock.start();
 			if (!GAME_PAUSE) {
 				if (!Gameclock.isRunning()) Gameclock.start();
@@ -221,15 +234,22 @@ int main()
 				Gameclock.reset();
 			}
 
+			SetTextVisible(false, "MUSIC_VOLUME");
+			SetTextVisible(false, "SOUND_VOLUME");
+			SetTextVisible(true, "SCORETEXT");
+			SetTextVisible(true, "SCORE");
+			SetTextVisible(true, "FPS");
+
 			if(scoregame != 0) EditText(std::to_string(scoregame) + "00", "SCORE");
 			else EditText(std::to_string(scoregame), "SCORE");
 			EditText("FPS: " + std::to_string(static_cast<int>(fpsGame.getFps())), "FPS");
 
-			//Check when to generate map
 			timestep.pause();
 
 			prev_initx = initx;
 			fpsGame.update();
+
+			//Check when to generate map
 			timestep.addFrame();
 			while (timestep.isUpdateRequired()) {
 				const float dt = timestep.getStepAsFloat() * 50.0f;
