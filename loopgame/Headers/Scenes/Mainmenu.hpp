@@ -31,5 +31,6 @@ extern void SetMainmenuPos();
 extern void BlackScreenProcess(bool& process, const float dt, float& started, sf::VertexArray& blackscreen1);
 extern void ActiveButtonMainMenu();
 extern void DrawMainMenu();
+extern void UpdateMousePosition();
 
 #endif

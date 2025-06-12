@@ -67,14 +67,14 @@ void ViewInit() {
 	view = sf::View(sf::FloatRect({ 0, 0 }, { 640, 480 }));
 }
 void updateView() {
-	const float vx = window.getSize().x / 640;
-	const float vy = window.getSize().y / 480;
+	const float vx = window.getSize().x / 640.0f;
+	const float vy = window.getSize().y / 480.0f;
 	const float min = std::min(vx, vy);
-	ViewXOff = window.getSize().x - (640 * min);
-	ViewYOff = window.getSize().y - (480 * min);
+	ViewXOff = window.getSize().x - (640.0f * min);
+	ViewYOff = window.getSize().y - (480.0f * min);
 	viewwin = getLetterboxView(view, window.getSize().x, window.getSize().y);
 	view.setCenter({ std::round(initx), 240.0f});
-	viewwin.setCenter(sf::Vector2f({ 640 / 2, 480 / 2 }));
+	viewwin.setCenter(sf::Vector2f({ 640.0f / 2.0f, 480.0f / 2.0f }));
 }
 void setView(float dt) {
 	if (processdeath) {

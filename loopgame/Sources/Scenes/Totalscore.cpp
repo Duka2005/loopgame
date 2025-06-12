@@ -21,10 +21,6 @@ void SetTotalScorePos() {
 }
 
 void ActiveTotalScore() {
-	const sf::Vector2i mouse = sf::Mouse::getPosition(window);
-	mouse_x = (static_cast<float>(mouse.x) - ViewXOff / 2.0f) * (640 / (static_cast<float>(window.getSize().x) - ViewXOff));
-	mouse_y = (static_cast<float>(mouse.y) - ViewYOff / 2.0f) * (480 / (static_cast<float>(window.getSize().y) - ViewYOff));
-
 	float mainmenutotalscore_x1 = mainmenutotalscore.getPosition().x;
 	float mainmenutotalscore_x2 = mainmenutotalscore_x1 + 176.0f;
 	float mainmenutotalscore_y1 = mainmenutotalscore.getPosition().y;

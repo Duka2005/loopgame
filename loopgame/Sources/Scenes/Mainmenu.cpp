@@ -2,6 +2,7 @@
 #include "../../Headers/Scenes/Mainmenu.hpp"
 #include "../../Headers/Window.hpp"
 #include "../../Headers/Sound.hpp"
+#include <iostream>
 
 float started = 0;
 bool BlackBackgroundTrigger = false;
@@ -26,6 +27,12 @@ sf::Sprite quitbutton(quittexture);
 
 sf::VertexArray blackscreen1(sf::PrimitiveType::TriangleStrip, 4);
 
+void UpdateMousePosition() {
+	const sf::Vector2i mouse = sf::Mouse::getPosition(window);
+	mouse_x = (static_cast<float>(mouse.x) - ViewXOff / 2.0f) * (640.0f / (static_cast<float>(window.getSize().x) - ViewXOff));
+	mouse_y = (static_cast<float>(mouse.y) - ViewYOff / 2.0f) * (480.0f / (static_cast<float>(window.getSize().y) - ViewYOff));
+}
+
 void SetMainmenuPos() {
 	backgroundmainmenu.setPosition({ 0.0f, 0.0f });
 	mariorunner.setPosition({ 120.0f, 0.0f });
@@ -46,11 +53,6 @@ void BlackScreenProcess(bool& process, const float dt, float& started, sf::Verte
 }
 
 void ActiveButtonMainMenu() {
-	const sf::Vector2i mouse = sf::Mouse::getPosition(window);
-	mouse_x = (static_cast<float>(mouse.x) - ViewXOff / 2.0f) * (640 / (static_cast<float>(window.getSize().x) - ViewXOff));
-	mouse_y = (static_cast<float>(mouse.y) - ViewYOff / 2.0f) * (480 / (static_cast<float>(window.getSize().y) - ViewYOff));
-
-
 	float startbutton_x1 = startbutton.getPosition().x;
 	float startbutton_x2 = startbutton_x1 + 82.0f;
 	float startbutton_y1 = startbutton.getPosition().y;

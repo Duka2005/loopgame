@@ -43,9 +43,6 @@ void SetOptionsPos() {
 }
 
 void ActiveButtonOptions() {
-	const sf::Vector2i mouse = sf::Mouse::getPosition(window);
-	mouse_x = (static_cast<float>(mouse.x) - ViewXOff / 2.0f) * (640 / (static_cast<float>(window.getSize().x) - ViewXOff));
-	mouse_y = (static_cast<float>(mouse.y) - ViewYOff / 2.0f) * (480 / (static_cast<float>(window.getSize().y) - ViewYOff));
 
 	float musicleft_x1 = musicleft.getPosition().x;
 	float musicleft_x2 = musicleft_x1 + 16.0f;

@@ -132,6 +132,8 @@ int WinMain()
 		pausesound.setVolume(soundvolume);
 		resumesound.setVolume(soundvolume);
 
+		UpdateMousePosition();
+
 		if (CurrentScene == 0) {
 			if (!(mainmenumusic.getStatus() == sf::Music::Status::Playing) && !BlackBackgroundTrigger) {
 				blackscreen1[0].color = blackscreen1[1].color = blackscreen1[2].color = blackscreen1[3].color = sf::Color(0, 0, 0, 0);
