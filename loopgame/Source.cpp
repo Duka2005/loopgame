@@ -16,8 +16,9 @@
 
 #include <ctre.hpp>
 
-int main()
+int WinMain()
 {
+	window.setFramerateLimit(500);
 	//Icon
 	sf::Image icon;
 	icon.loadFromFile("icon.png");
@@ -30,7 +31,7 @@ int main()
 	SetOptionsPos();
 
 	std::string lineoptions;
-	std::ifstream inputOptionsFile("options.txt");
+	std::ifstream inputOptionsFile("options.cfg");
 
 	while (std::getline(inputOptionsFile, lineoptions)) {
 		for (auto& match : ctre::search_all<"Music=(.*)">(lineoptions)) {
@@ -109,7 +110,7 @@ int main()
 				}
 				if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && exitoptionscanpress) {
 					CurrentScene = 0;
-					std::ofstream outputOptionFile("options.txt");
+					std::ofstream outputOptionFile("options.cfg");
 
 					if (outputOptionFile.is_open()) {
 						outputOptionFile << "Music=" << musicvolume << "\n";
