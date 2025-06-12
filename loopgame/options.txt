@@ -1,2 +1,2 @@
-Music=100
+Music=50
 Sound=100

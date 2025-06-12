@@ -19,5 +19,6 @@ extern sf::Sound resumesound;
 
 extern sf::Music music;
 extern sf::Music mainmenumusic;
+extern sf::Music totalscoremusic;
 
 #endif

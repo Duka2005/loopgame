@@ -147,6 +147,7 @@
     <ClCompile Include="Sources\Mario.cpp" />
     <ClCompile Include="Sources\Scenes\Mainmenu.cpp" />
     <ClCompile Include="Sources\Scenes\Options.cpp" />
+    <ClCompile Include="Sources\Scenes\Totalscore.cpp" />
     <ClCompile Include="Sources\Sound.cpp" />
     <ClCompile Include="Sources\Text.cpp" />
     <ClCompile Include="Sources\Tileset.cpp" />
@@ -164,6 +165,7 @@
     <ClInclude Include="Headers\Mario.hpp" />
     <ClInclude Include="Headers\Scenes\Mainmenu.hpp" />
     <ClInclude Include="Headers\Scenes\Options.hpp" />
+    <ClInclude Include="Headers\Scenes\Totalscore.hpp" />
     <ClInclude Include="Headers\Sound.hpp" />
     <ClInclude Include="Headers\Text.hpp" />
     <ClInclude Include="Headers\Tileset.hpp" />

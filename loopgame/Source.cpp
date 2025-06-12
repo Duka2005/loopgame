@@ -12,6 +12,7 @@
 #include "Headers/Text.hpp"
 #include "Headers/Scenes/Mainmenu.hpp"
 #include "Headers/Scenes/Options.hpp"
+#include "Headers/Scenes/Totalscore.hpp"
 
 #include <ctre.hpp>
 
@@ -44,9 +45,12 @@ int main()
 	AddText("MUSIC_VOLUME", "", 128 + 92 + 16 + 5, 136);
 	AddText("SOUND_VOLUME", "", 128 + 92 + 16 + 5, 182);
 
+	//TotalScore
+	SetTotalScorePos();
+
+	AddText("TOTALSCORE", "", 240, 200);
 
 	//Gameplay
-	int scoregame = 0;
 
 	Gameclock.reset();
 
@@ -118,6 +122,7 @@ int main()
 
 		music.setVolume(musicvolume);
 		mainmenumusic.setVolume(musicvolume);
+		totalscoremusic.setVolume(musicvolume);
 
 		jump.setVolume(soundvolume);
 		death.setVolume(soundvolume);
@@ -132,6 +137,8 @@ int main()
 				mainmenumusic.play();
 			}
 			
+			exitoptionscanpress = false;
+
 			ActiveButtonMainMenu();
 
 			timestep.addFrame();
@@ -174,6 +181,7 @@ int main()
 			SetTextVisible(false, "PAUSETEXT2");
 			SetTextVisible(false, "SCORE");
 			SetTextVisible(false, "FPS");
+			SetTextVisible(false, "TOTALSCORE");
 			SetTextVisible(true, "MUSIC_VOLUME");
 			SetTextVisible(true, "SOUND_VOLUME");
 
@@ -183,6 +191,51 @@ int main()
 			rTexture.clear();
 			DrawOptions();
 			UpdateText();
+
+			rTexture.display();
+
+			window.draw(sf::Sprite(rTexture.getTexture()));
+			window.display();
+		}
+
+		else if (CurrentScene == 3) {
+			if (!(totalscoremusic.getStatus() == sf::Music::Status::Playing) && !BlackBackgroundTrigger) {
+				blackscreen1[0].color = blackscreen1[1].color = blackscreen1[2].color = blackscreen1[3].color = sf::Color(0, 0, 0, 0);
+				totalscoremusic.play();
+			}
+			SetTextVisible(false, "SCORETEXT");
+			SetTextVisible(false, "PAUSETEXT1");
+			SetTextVisible(false, "PAUSETEXT2");
+			SetTextVisible(false, "SCORE");
+			SetTextVisible(false, "FPS");
+			SetTextVisible(false, "MUSIC_VOLUME");
+			SetTextVisible(false, "SOUND_VOLUME");
+			SetTextVisible(true, "TOTALSCORE");
+
+			EditText("Score:"+std::to_string(scoregame)+"00", "TOTALSCORE");
+
+			ActiveTotalScore();
+
+			timestep.addFrame();
+			while (timestep.isUpdateRequired()) {
+				float dt{ timestep.getStepAsFloat() * 50.0f };
+				BlackScreenProcess(BlackBackgroundTrigger, dt, started, blackscreen1);
+			}
+
+			if (started >= 255) {
+				totalscoremusic.stop();
+				scoregame = 0;
+				CurrentScene = 2;
+				started = 0;
+				BlackBackgroundTrigger = false;
+			}
+
+			window.clear();
+			rTexture.clear();
+			rTexture.draw(totalscorebg);
+			UpdateText();
+			TotalScoreDraw();
+			rTexture.draw(blackscreen1);
 
 			rTexture.display();
 
@@ -219,14 +272,13 @@ int main()
 			}
 			if (MarioDeathClock.getElapsedTime().asSeconds() >= 4) {
 				death.stop();
-				CurrentScene = 0;
+				CurrentScene = 3;
 				SetMarioPosition(320, 416);
 				MarioDeathClock.reset();
 				processdeath = false;
 				CanMarioControl = true;
 				initx = 320.0f;
 				speedtime = 2.0f;
-				scoregame = 0;
 				prev_speedtime = 2.0f;
 				DeleteAllLevel();
 				LevelInit();
@@ -236,6 +288,7 @@ int main()
 
 			SetTextVisible(false, "MUSIC_VOLUME");
 			SetTextVisible(false, "SOUND_VOLUME");
+			SetTextVisible(false, "TOTALSCORE");
 			SetTextVisible(true, "SCORETEXT");
 			SetTextVisible(true, "SCORE");
 			SetTextVisible(true, "FPS");

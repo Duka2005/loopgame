@@ -17,6 +17,8 @@ sf::View view;
 
 int CurrentScene = 0;
 
+int scoregame = 0;
+
 float ViewXOff, ViewYOff;
 
 float speedtime = 2.0f;

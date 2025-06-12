@@ -13,6 +13,7 @@ extern sf::View viewwin;
 extern sf::View view;
 
 extern int CurrentScene;
+extern int scoregame;
 
 extern void ViewInit();
 extern void setView(float dt);
