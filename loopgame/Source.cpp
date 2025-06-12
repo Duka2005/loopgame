@@ -170,7 +170,6 @@ int WinMain()
 
 		else if (CurrentScene == 1) {
 			if (!(mainmenumusic.getStatus() == sf::Music::Status::Playing) && !BlackBackgroundTrigger) mainmenumusic.play();
-			updateView();
 			rTexture.setView(view);
 			window.setView(viewwin);
 
@@ -187,6 +186,8 @@ int WinMain()
 			SetTextVisible(true, "SOUND_VOLUME");
 
 			ActiveButtonOptions();
+
+			updateView();
 
 			window.clear();
 			rTexture.clear();
@@ -230,6 +231,10 @@ int WinMain()
 				started = 0;
 				BlackBackgroundTrigger = false;
 			}
+
+			updateView();
+			rTexture.setView(view);
+			window.setView(viewwin);
 
 			window.clear();
 			rTexture.clear();
