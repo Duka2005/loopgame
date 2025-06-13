@@ -24,13 +24,17 @@ Trò chơi này được phát triển với mục tiêu giúp người dùng c�
 
 ## Giao diện
 - **Main menu**
+
 ![image](https://raw.githubusercontent.com/Duka2005/loopgame/refs/heads/master/loopgame/Image_Introduction/MainMenu.png)
 
 - **Options**
+
 ![image](https://raw.githubusercontent.com/Duka2005/loopgame/refs/heads/master/loopgame/Image_Introduction/Options.png)
 
 - **Gameplay**
+
 ![image](https://raw.githubusercontent.com/Duka2005/loopgame/refs/heads/master/loopgame/Image_Introduction/Gameplay.png)
 
 - **Total score**
+
 ![image](https://raw.githubusercontent.com/Duka2005/loopgame/refs/heads/master/loopgame/Image_Introduction/Totalscore.png)
